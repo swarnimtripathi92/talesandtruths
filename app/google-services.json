@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "849108116618",
+    "project_id": "talesandtruths-4733a",
+    "storage_bucket": "talesandtruths-4733a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849108116618:android:018751349621243455b973",
+        "android_client_info": {
+          "package_name": "com.example.talesandtruths"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgfRTA17_YRBbV5_8w_egxvL0vYFCzLO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
