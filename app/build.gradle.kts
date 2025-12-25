@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    // 🔥 VERY IMPORTANT
+    alias(libs.plugins.google.services)
+    id("kotlin-kapt")
 }
 
 android {
@@ -9,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.talesandtruths"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -56,4 +59,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.glide)
+    kapt(libs.glideCompiler)
+// 🔐 Firebase Authentication
+    implementation("com.google.firebase:firebase-auth-ktx")
+    // 🔐 Google Sign-In
+    implementation("com.google.android.gms:play-services-auth:21.1.1")
+
+
 }

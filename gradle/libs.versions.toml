@@ -20,7 +20,11 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
+glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.16.0" }
+glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version = "4.16.0" }
+
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+google-services = { id = "com.google.gms.google-services", version = "4.4.2" }

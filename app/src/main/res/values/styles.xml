@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 🔵 App Theme -->
+    <style name="Theme.TalesandTruths" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">#4A6CF7</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+
+        <!-- Background -->
+        <item name="android:colorBackground">#F2F4F8</item>
+    </style>
+
+    <!-- 🖼️ Rounded Image style (for story images) -->
+    <style name="RoundedImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+</resources>

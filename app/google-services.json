@@ -12,7 +12,12 @@
           "package_name": "com.example.talesandtruths"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "849108116618-p3r7tjd6cc84hq06jpka83g8lbrudo29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBgfRTA17_YRBbV5_8w_egxvL0vYFCzLO4"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "849108116618-p3r7tjd6cc84hq06jpka83g8lbrudo29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
