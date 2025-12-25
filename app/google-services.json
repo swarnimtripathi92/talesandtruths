@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "849108116618-u3gstguk6td4uubanbndu8qiopost3pj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.talesandtruths",
+            "certificate_hash": "a39840b94c9695f49886334366e4a7ec40455f3d"
+          }
+        },
+        {
           "client_id": "849108116618-p3r7tjd6cc84hq06jpka83g8lbrudo29.apps.googleusercontent.com",
           "client_type": 3
         }
