@@ -3,5 +3,19 @@
     <string name="default_web_client_id">
     your-client-id.apps.googleusercontent.com
 </string>
+    <string-array name="story_filters">
+        <item>All</item>
+        <item>Published</item>
+        <item>Draft</item>
+    </string-array>
+    <string-array name="story_categories">
+        <item>moral</item>
+        <item>bedtime</item>
+        <item>kidsgk</item>
+        <item>Mythology</item>
+        <item>Inspirational</item>
+        <item>General</item>
+    </string-array>
+
 
 </resources>

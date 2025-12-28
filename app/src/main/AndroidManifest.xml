@@ -4,6 +4,8 @@
     package="com.example.talesandtruths">
     <!-- 🔥 Internet required for Firebase -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
 
     <application
         android:allowBackup="true"
@@ -25,17 +27,38 @@
         <activity
             android:name=".KidsStoriesActivity"
             android:exported="false" /> <!-- 🏠 Home / Launcher Activity -->
+        <activity android:name=".AdminPanelActivity" />
+        <activity android:name=".AddStoryActivity" />
+        <activity android:name=".StoryListActivity" />
+
+        <activity android:name=".MoralStoriesActivity" />
+
+        <activity android:name=".StoryReaderActivity" />
+        <activity android:name=".ChildProfileActivity" />
+
+        <activity android:name=".ReadingHistoryActivity" />
+        <activity android:name=".ReadingStatsActivity" />
+        <activity android:name=".BadgesActivity" />
+        <activity android:name=".ReadingGoalActivity" />
+        <activity android:name=".WeeklyGraphActivity" />
+        <activity android:name=".KidsInfotainmentActivity" />
+        <activity android:name=".GamesForKidsActivity" />
+        <activity android:name=".StaticGKActivity" />
+        <activity android:name=".CurrentGKActivity" />
+        <activity android:name=".GKSubCategoryActivity" />
+        <activity android:name=".AlphabetSelectionActivity" />
+        <activity android:name=".AlphabetTraceActivity" />
 
 
-        <activity
-            android:name=".MainActivity"
+        <activity android:name=".HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
     </application>
 
 </manifest>

@@ -1,17 +1,18 @@
 package com.example.talesandtruths
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.firestore.FirebaseFirestore
 
 class StoryDetailActivity : AppCompatActivity() {
 
-    private val blocks = mutableListOf<StoryBlock>()
+    // ✅ Correct type
+    private val blocks = mutableListOf<ContentBlock>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,12 @@ class StoryDetailActivity : AppCompatActivity() {
         val recycler = findViewById<RecyclerView>(R.id.recyclerContent)
         recycler.layoutManager = LinearLayoutManager(this)
 
-        val adapter = StoryContentAdapter(blocks)
+        // ✅ Adapter expects List<ContentBlock>
+        val adapter =  StoryContentAdapter(
+            blocks,
+            18f,
+            Typeface.SANS_SERIF
+        )
         recycler.adapter = adapter
 
         FirebaseFirestore.getInstance()
@@ -35,6 +41,7 @@ class StoryDetailActivity : AppCompatActivity() {
             .document(storyId)
             .get()
             .addOnSuccessListener { doc ->
+
                 toolbar.title = doc.getString("title") ?: "Story"
 
                 val content = doc.get("content") as? List<*> ?: return@addOnSuccessListener
@@ -44,11 +51,20 @@ class StoryDetailActivity : AppCompatActivity() {
                     val map = item as? Map<*, *> ?: continue
                     val type = map["type"] as? String ?: continue
                     val value = map["value"] as? String ?: continue
-                    blocks.add(StoryBlock(type, value))
+
+                    // ✅ FIX HERE
+                    blocks.add(
+                        ContentBlock(
+                            type = type,
+                            value = value
+                        )
+                    )
                 }
 
                 adapter.notifyDataSetChanged()
             }
+            .addOnFailureListener {
+                Log.e("STORY_DETAIL", "Failed to load story", it)
+            }
     }
-
 }

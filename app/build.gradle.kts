@@ -65,6 +65,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     // 🔐 Google Sign-In
     implementation("com.google.android.gms:play-services-auth:21.1.1")
+    implementation ("com.google.firebase:firebase-storage-ktx")
 
 
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

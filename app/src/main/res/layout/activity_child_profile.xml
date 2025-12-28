@@ -1,0 +1,112 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- 👶 CHILD PROFILE CARD -->
+        <LinearLayout
+            android:id="@+id/layoutProfile"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_child_profile_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Child Name -->
+            <TextView
+                android:id="@+id/tvProfileName"
+                android:text="Aarav"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!-- Subtitle -->
+            <TextView
+                android:text="🌟 Young Reader"
+                android:textSize="16sp"
+                android:textColor="#E3F2FD"
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!-- Details -->
+            <TextView
+                android:id="@+id/tvProfileDetails"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="16dp"
+                android:lineSpacingExtra="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!-- Edit Button -->
+            <Button
+                android:id="@+id/btnEditProfile"
+                android:text="✏️ Edit Profile"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#FFFFFF"
+                android:textColor="#3F51B5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+        <!-- 📝 FORM VIEW -->
+        <LinearLayout
+            android:id="@+id/layoutForm"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/etChildName"
+                android:hint="Child Name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Spinner
+                android:id="@+id/spAge"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Spinner
+                android:id="@+id/spClass"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Spinner
+                android:id="@+id/spLanguage"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Spinner
+                android:id="@+id/spReadingLevel"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnSaveProfile"
+                android:text="Save Profile"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

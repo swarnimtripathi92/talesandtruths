@@ -3,8 +3,6 @@
     android:id="@+id/tvStoryText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp"
-    android:paddingBottom="16dp"
-    android:textColor="#222222"
     android:textSize="18sp"
-    android:lineSpacingExtra="6dp"/>
+    android:lineSpacingMultiplier="1.4"
+    android:textColor="?attr/colorOnSurface" />

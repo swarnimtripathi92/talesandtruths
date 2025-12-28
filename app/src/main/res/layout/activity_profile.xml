@@ -44,6 +44,47 @@
         android:text="Admin Panel"
         android:visibility="gone"
         android:layout_marginTop="12dp" />
+    <Button
+        android:id="@+id/btnChildProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="👶 Child Profile"
+        android:visibility="gone"
+        android:layout_marginTop="12dp"/>
+    <Button
+        android:id="@+id/btnReadingHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="📖 Reading History"
+        android:visibility="gone"
+        android:layout_marginTop="12dp"/>
+
+    <Button
+        android:id="@+id/btnReadingStats"
+        android:text="📊 Reading Stats"
+        android:visibility="gone" android:layout_height="wrap_content" android:layout_width="match_parent"/>
+    <Button
+        android:id="@+id/btnBadges"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🏆 Badges and Achievements"
+        android:visibility="gone"
+        android:layout_marginTop="12dp"/>
+    <Button
+        android:id="@+id/btnReadingGoal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="🎯 Daily Reading Goal"
+        android:visibility="gone"
+        android:layout_marginTop="12dp"/>
+
+    <Button
+        android:id="@+id/btnWeeklyGraph"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="📈 Weekly Reading Progress"
+        android:visibility="gone"
+        android:layout_marginTop="12dp"/>
 
     <Button
         android:id="@+id/btnLogout"

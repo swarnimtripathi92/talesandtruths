@@ -21,33 +21,38 @@ class KidsStoriesActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         adapter = KidsStoriesAdapter(storiesList)
-        recyclerView.adapter = adapter   // 🔥 adapter pehle attach
+        recyclerView.adapter = adapter
 
         fetchKidsStories()
     }
 
     private fun fetchKidsStories() {
 
-        Log.d("KIDS_FLOW", "fetchKidsStories() ENTERED")
-
-        val db = FirebaseFirestore.getInstance()
-        Log.d("KIDS_FLOW", "Firestore instance created")
-
-        db.collection("stories")
+        FirebaseFirestore.getInstance()
+            .collection("stories")
+            //.whereEqualTo("status", "published")
+           // .whereEqualTo("audience", "kids")
+            .orderBy("updatedAt")
             .get()
             .addOnSuccessListener { documents ->
-                Log.d("KIDS_FLOW", "SUCCESS, docs = ${documents.size()}")
 
                 storiesList.clear()
 
                 for (doc in documents) {
+
                     val title = doc.getString("title") ?: continue
-                    storiesList.add(KidsStory(doc.id, title))
+                    val coverImage = doc.getString("coverImage") ?: ""   // ✅ FIX HERE
+
+                    storiesList.add(
+                        KidsStory(
+                            id = doc.id,
+                            title = title,
+                            coverImageUrl = coverImage
+                        )
+                    )
                 }
 
-                Log.d("KIDS_FLOW", "Adapter list size = ${storiesList.size}")
-
-                adapter.notifyDataSetChanged() // 🔥 THIS IS KEY
+                adapter.notifyDataSetChanged()
             }
             .addOnFailureListener { e ->
                 Log.e("KIDS_FLOW", "FAILURE", e)
