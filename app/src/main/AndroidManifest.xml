@@ -48,7 +48,9 @@
         <activity android:name=".GKSubCategoryActivity" />
         <activity android:name=".AlphabetSelectionActivity" />
         <activity android:name=".AlphabetTraceActivity" />
-
+        <activity android:name=".OurWorldActivity" />
+        <activity android:name=".ContinentsActivity" />
+        <activity android:name=".ContinentDetailActivity" />
 
         <activity android:name=".HomeActivity"
             android:exported="true">

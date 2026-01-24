@@ -79,10 +79,21 @@ class StaticGKActivity : AppCompatActivity() {
         )
 
         recycler.adapter = StaticGKAdapter(categories) { category ->
-            val intent = Intent(this, GKSubCategoryActivity::class.java)
-            intent.putExtra("categoryId", category.id)
-            intent.putExtra("title", category.title)
-            startActivity(intent)
+
+            when (category.id) {
+
+                "our_world" -> {
+                    startActivity(
+                        Intent(this, OurWorldActivity::class.java)
+                    )
+                }
+
+                else -> {
+                    // baaki categories future me
+                    // abhi blank ya toast bhi dikha sakte ho
+                }
+            }
         }
+
     }
 }

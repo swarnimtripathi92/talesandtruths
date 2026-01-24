@@ -3,7 +3,7 @@ package com.example.talesandtruths
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import com.google.android.material.card.MaterialCardView
 
 class KidsInfotainmentActivity : AppCompatActivity() {
 
@@ -11,16 +11,19 @@ class KidsInfotainmentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kids_infotainment)
 
-        findViewById<CardView>(R.id.cardStaticGK).setOnClickListener {
-            startActivity(Intent(this, StaticGKActivity::class.java))
-        }
+        findViewById<MaterialCardView>(R.id.cardStaticGK)
+            .setOnClickListener {
+                startActivity(Intent(this, StaticGKActivity::class.java))
+            }
 
-        findViewById<CardView>(R.id.cardCurrentGK).setOnClickListener {
-            startActivity(Intent(this, CurrentGKActivity::class.java))
-        }
+        findViewById<MaterialCardView>(R.id.cardCurrentGK)
+            .setOnClickListener {
+                // Future: Current GK screen
+            }
 
-        findViewById<CardView>(R.id.cardGames).setOnClickListener {
-            startActivity(Intent(this, GamesForKidsActivity::class.java))
-        }
+        findViewById<MaterialCardView>(R.id.cardPuzzles)
+            .setOnClickListener {
+                // Future: Puzzles screen
+            }
     }
 }
