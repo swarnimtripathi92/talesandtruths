@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.talesandtruths"
+    namespace = "com.kidverse.app"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.talesandtruths"
+        applicationId = "com.kidverse.app"
         minSdk = 23
         targetSdk = 36
         versionCode = 1
@@ -19,6 +19,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
 
     buildTypes {
         release {

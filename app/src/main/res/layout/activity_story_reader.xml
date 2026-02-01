@@ -75,6 +75,16 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_font"
                 app:tint="?attr/colorOnSurface" />
+            <ImageButton
+                android:id="@+id/btnSpeak"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_speaker"
+                android:clickable="true"
+                android:focusable="true"
+                app:tint="?attr/colorOnSurface" />
+
 
         </LinearLayout>
     </com.google.android.material.appbar.MaterialToolbar>

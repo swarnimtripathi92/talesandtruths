@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.talesandtruths">
+    package="com.kidverse.app">
     <!-- 🔥 Internet required for Firebase -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -18,41 +18,46 @@
         android:theme="@style/Theme.TalesandTruths"
         tools:targetApi="31">
         <activity
-            android:name=".ProfileActivity"
+            android:name="com.kidverse.app.ProfileActivity"
             android:exported="false" />
         <!-- 📖 Story Detail Screen -->
         <activity
-            android:name=".StoryDetailActivity"
+            android:name="com.kidverse.app.StoryDetailActivity"
             android:exported="false" /> <!-- 🧒 Kids Stories List Screen -->
         <activity
-            android:name=".KidsStoriesActivity"
+            android:name="com.kidverse.app.KidsStoriesActivity"
             android:exported="false" /> <!-- 🏠 Home / Launcher Activity -->
-        <activity android:name=".AdminPanelActivity" />
-        <activity android:name=".AddStoryActivity" />
-        <activity android:name=".StoryListActivity" />
+        <activity android:name="com.kidverse.app.AdminPanelActivity" />
+        <activity android:name="com.kidverse.app.AddStoryActivity" />
+        <activity android:name="com.kidverse.app.StoryListActivity" />
 
-        <activity android:name=".MoralStoriesActivity" />
+        <activity android:name="com.kidverse.app.MoralStoriesActivity" />
 
-        <activity android:name=".StoryReaderActivity" />
-        <activity android:name=".ChildProfileActivity" />
+        <activity android:name="com.kidverse.app.StoryReaderActivity" />
+        <activity android:name="com.kidverse.app.ChildProfileActivity" />
 
-        <activity android:name=".ReadingHistoryActivity" />
-        <activity android:name=".ReadingStatsActivity" />
-        <activity android:name=".BadgesActivity" />
-        <activity android:name=".ReadingGoalActivity" />
-        <activity android:name=".WeeklyGraphActivity" />
-        <activity android:name=".KidsInfotainmentActivity" />
-        <activity android:name=".GamesForKidsActivity" />
-        <activity android:name=".StaticGKActivity" />
-        <activity android:name=".CurrentGKActivity" />
-        <activity android:name=".GKSubCategoryActivity" />
-        <activity android:name=".AlphabetSelectionActivity" />
-        <activity android:name=".AlphabetTraceActivity" />
-        <activity android:name=".OurWorldActivity" />
-        <activity android:name=".ContinentsActivity" />
-        <activity android:name=".ContinentDetailActivity" />
+        <activity android:name="com.kidverse.app.ReadingHistoryActivity" />
+        <activity android:name="com.kidverse.app.ReadingStatsActivity" />
+        <activity android:name="com.kidverse.app.BadgesActivity" />
+        <activity android:name="com.kidverse.app.ReadingGoalActivity" />
+        <activity android:name="com.kidverse.app.WeeklyGraphActivity" />
+        <activity android:name="com.kidverse.app.KidsInfotainmentActivity" />
+        <activity android:name="com.kidverse.app.GamesForKidsActivity" />
+        <activity android:name="com.kidverse.app.StaticGKActivity" />
+        <activity android:name="com.kidverse.app.CurrentGKActivity" />
+        <activity android:name="com.kidverse.app.GKSubCategoryActivity" />
+        <activity android:name="com.kidverse.app.AlphabetSelectionActivity" />
+        <activity android:name="com.kidverse.app.AlphabetTraceActivity" />
+        <activity android:name="com.kidverse.app.OurWorldActivity" />
+        <activity android:name="com.kidverse.app.ContinentsActivity" />
+        <activity android:name="com.kidverse.app.ContinentDetailActivity" />
+        <activity android:name="com.kidverse.app.BedtimeStoriesActivity" />
+        <activity android:name="com.kidverse.app.OceanActivity" />
+        <activity android:name="com.kidverse.app.OceanDetailActivity" />
+        <activity android:name="com.kidverse.app.LandFormsActivity"/>
+        <activity android:name="com.kidverse.app.LandFormsDetailActivity"/>
+        <activity android:name="com.kidverse.app.HomeActivity"
 
-        <activity android:name=".HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -3,72 +3,100 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F6F8FF">
 
-    <!-- Header Image -->
-    <ImageView
-        android:id="@+id/imgHeader"
+    <!-- 🌈 HEADER CARD -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/headerCard"
         android:layout_width="0dp"
-        android:layout_height="220dp"
-        android:scaleType="centerCrop"
+        android:layout_height="240dp"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- Title -->
+        <ImageView
+            android:id="@+id/imgHeader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- 🏷️ TITLE -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="24sp"
+        android:text="Asia"
+        android:textSize="26sp"
         android:textStyle="bold"
-        android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/imgHeader"
+        android:textColor="#1F2937"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/headerCard"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Buttons Row -->
+    <!-- 🎛️ TOP CONTROLS -->
     <LinearLayout
         android:id="@+id/topButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="12dp"
-        app:layout_constraintTop_toBottomOf="@id/imgHeader"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/headerCard"
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:id="@+id/btnTextSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
             android:text="A+"
             android:textStyle="bold"
-            android:padding="10dp" />
+            android:textColor="#374151"
+            android:background="@drawable/bg_round_control"/>
 
         <TextView
             android:id="@+id/btnTheme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
             android:text="🌙"
-            android:padding="10dp" />
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_round_control"/>
 
         <TextView
             android:id="@+id/btnSpeak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
             android:text="🔊"
-            android:padding="10dp" />
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_round_control"/>
     </LinearLayout>
 
-    <!-- Facts Recycler -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerFacts"
+    <!-- 📦 CONTENT HOLDER (neutral, sections will be colorful) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/contentCard"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingBottom="12dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="#F8FAFF"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerFacts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12dp"/>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

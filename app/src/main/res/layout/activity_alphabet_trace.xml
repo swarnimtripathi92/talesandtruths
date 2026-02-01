@@ -33,7 +33,7 @@
             android:src="@drawable/a_trace"/>
 
         <!-- Drawing Canvas -->
-        <com.example.talesandtruths.TracingView
+        <com.kidverse.app.TracingView
             android:id="@+id/tracingView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

@@ -1,20 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#FFF8EC">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- 🧒📖 KIDS STORIES HEADER -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="🧒 Kids Stories"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="12dp"/>
+        android:layout_margin="12dp"
+        app:cardCornerRadius="26dp"
+        app:cardElevation="8dp"
+        android:background="@drawable/bg_kids_header1">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🧒 Kids Stories"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#FF6F00"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Moral and Bedtime stories to enjoy and learn"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#FF8F00"
+                android:layout_marginTop="6dp"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- 📚 STORIES LIST -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerStories"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="12dp"
+        android:clipToPadding="false"/>
+
 </LinearLayout>
