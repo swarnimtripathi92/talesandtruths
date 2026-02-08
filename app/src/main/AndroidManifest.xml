@@ -56,6 +56,9 @@
         <activity android:name="com.kidverse.app.OceanDetailActivity" />
         <activity android:name="com.kidverse.app.LandFormsActivity"/>
         <activity android:name="com.kidverse.app.LandFormsDetailActivity"/>
+        <activity android:name="com.kidverse.app.PdfReaderActivity"/>
+        <activity android:name="com.kidverse.app.PreviousIssuesActivity"/>
+
         <activity android:name="com.kidverse.app.HomeActivity"
 
             android:exported="true">

@@ -19,7 +19,7 @@ class KidsInfotainmentActivity : AppCompatActivity() {
 
         findViewById<MaterialCardView>(R.id.cardCurrentGK)
             .setOnClickListener {
-                // Future: Current GK screen
+                startActivity(Intent(this, CurrentGKActivity::class.java))
             }
 
         findViewById<MaterialCardView>(R.id.cardPuzzles)

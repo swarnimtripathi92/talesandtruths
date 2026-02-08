@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal">
+
+        <!-- 🗓 Date / Month (centered, like heading) -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="08 Feb 2026"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#222222"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- 🖼 Issue Image (same style as CurrentGK) -->
+        <ImageView
+            android:id="@+id/imgIssue"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@drawable/rounded_image_bg"
+            android:layout_marginBottom="12dp"/>
+
+
+        <!-- 🔘 Buttons section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Read + Download row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnRead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Read"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#4CAF50"/>
+
+                <Button
+                    android:id="@+id/btnDownload"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Download"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#FF9800"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

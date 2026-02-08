@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <!-- 🔙 TOP BAR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_back"
+            android:contentDescription="Back" />
+    </LinearLayout>
+
+    <!-- 📄 PDF VIEW AREA -->
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/photoView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF" />
+
+    <!-- 📄 PAGE INDICATOR -->
+    <TextView
+        android:id="@+id/pageIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:textSize="14sp"
+        android:textColor="#333333" />
+
+    <!-- ⏮️ ⏭️ CONTROLS -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <Button
+            android:id="@+id/btnPrev"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:text="Prev" />
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="1dp" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:text="Next" />
+    </LinearLayout>
+
+</LinearLayout>
