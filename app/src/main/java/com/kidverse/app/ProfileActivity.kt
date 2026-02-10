@@ -1,23 +1,26 @@
 package com.kidverse.app
-
+import com.kidverse.app.BuildConfig
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private val firestore by lazy { FirebaseFirestore.getInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,18 +62,37 @@ class ProfileActivity : AppCompatActivity() {
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
             auth.signInWithCredential(credential)
                 .addOnSuccessListener {
+                    ensureUserDocument()
                     updateUI()
                 }
+        }
+    }
+
+    // 🔐 Ensure Firestore user document exists
+    private fun ensureUserDocument() {
+        val user = auth.currentUser ?: return
+        val userRef = firestore.collection("users").document(user.uid)
+
+        userRef.get().addOnSuccessListener { doc ->
+            if (!doc.exists()) {
+                val data = hashMapOf(
+                    "isPremium" to false,
+                    "createdAt" to FieldValue.serverTimestamp()
+                )
+                userRef.set(data)
+            }
         }
     }
 
     private fun updateUI() {
         val tvName = findViewById<TextView>(R.id.tvName)
         val tvEmail = findViewById<TextView>(R.id.tvEmail)
+        val tvPremium = findViewById<TextView>(R.id.tvPremiumStatus)
 
         val btnLogin = findViewById<Button>(R.id.btnLogin)
         val btnLogout = findViewById<Button>(R.id.btnLogout)
         val btnAdmin = findViewById<Button>(R.id.btnAdminPanel)
+        val btnTogglePremium = findViewById<Button>(R.id.btnTogglePremium)
 
         val btnChildProfile = findViewById<Button>(R.id.btnChildProfile)
         val btnReadingHistory = findViewById<Button>(R.id.btnReadingHistory)
@@ -84,9 +106,11 @@ class ProfileActivity : AppCompatActivity() {
         if (user == null) {
             tvName.text = "Welcome"
             tvEmail.text = "Sign in to personalize your experience"
+            tvPremium.text = ""
 
             btnLogin.visibility = View.VISIBLE
             btnLogout.visibility = View.GONE
+            btnTogglePremium.visibility = View.GONE
 
             btnChildProfile.visibility = View.GONE
             btnReadingHistory.visibility = View.GONE
@@ -103,66 +127,90 @@ class ProfileActivity : AppCompatActivity() {
             btnLogin.visibility = View.GONE
             btnLogout.visibility = View.VISIBLE
 
-            // 👶 Child Profile
             btnChildProfile.visibility = View.VISIBLE
+            btnReadingHistory.visibility = View.VISIBLE
+            btnReadingStats.visibility = View.VISIBLE
+            btnReadingGoal.visibility = View.VISIBLE
+            btnBadges.visibility = View.VISIBLE
+            btnWeeklyGraph.visibility = View.VISIBLE
+
             btnChildProfile.setOnClickListener {
                 startActivity(Intent(this, ChildProfileActivity::class.java))
             }
-
-            // 📖 Reading History
-            btnReadingHistory.visibility = View.VISIBLE
             btnReadingHistory.setOnClickListener {
                 startActivity(Intent(this, ReadingHistoryActivity::class.java))
             }
-
-            // 📊 Reading Stats
-            btnReadingStats.visibility = View.VISIBLE
             btnReadingStats.setOnClickListener {
                 startActivity(Intent(this, ReadingStatsActivity::class.java))
             }
-
-            // 🎯 Daily Reading Goal
-            btnReadingGoal.visibility = View.VISIBLE
             btnReadingGoal.setOnClickListener {
                 startActivity(Intent(this, ReadingGoalActivity::class.java))
             }
-
-            // 🏆 Badges
-            btnBadges.visibility = View.VISIBLE
             btnBadges.setOnClickListener {
                 startActivity(Intent(this, BadgesActivity::class.java))
             }
-
-            // 📈 Weekly Graph
-            btnWeeklyGraph.visibility = View.VISIBLE
             btnWeeklyGraph.setOnClickListener {
                 startActivity(Intent(this, WeeklyGraphActivity::class.java))
             }
 
-            // 👑 Admin Panel
-            btnAdmin.visibility = View.GONE
+            loadPremiumStatus()
+
+            if (BuildConfig.DEBUG) {
+                btnTogglePremium.visibility = View.VISIBLE
+                btnTogglePremium.setOnClickListener {
+                    togglePremium()
+                }
+            } else {
+                btnTogglePremium.visibility = View.GONE
+            }
+
             checkAdminAndUpdateUI()
         }
     }
 
+    // 💎 Load premium status
+    private fun loadPremiumStatus() {
+        val user = auth.currentUser ?: return
+        val tvPremium = findViewById<TextView>(R.id.tvPremiumStatus)
+
+        firestore.collection("users")
+            .document(user.uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                val isPremium = doc.getBoolean("isPremium") ?: false
+                tvPremium.text =
+                    if (isPremium) "💎 Premium User" else "🆓 Free User"
+            }
+    }
+
+    // 🔁 DEV ONLY – Toggle premium
+    private fun togglePremium() {
+        val user = auth.currentUser ?: return
+        val userRef = firestore.collection("users").document(user.uid)
+
+        userRef.get().addOnSuccessListener { doc ->
+            val current = doc.getBoolean("isPremium") ?: false
+            userRef.update("isPremium", !current)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Premium toggled (DEV)", Toast.LENGTH_SHORT).show()
+                    loadPremiumStatus()
+                }
+        }
+    }
+
+    // 👑 Admin check
     private fun checkAdminAndUpdateUI() {
         val user = auth.currentUser ?: return
         val btnAdmin = findViewById<Button>(R.id.btnAdminPanel)
 
-        FirebaseFirestore.getInstance()
-            .collection("admins")
+        firestore.collection("admins")
             .document(user.uid)
             .get()
             .addOnSuccessListener { doc ->
                 if (doc.exists()) {
                     btnAdmin.visibility = View.VISIBLE
                     btnAdmin.setOnClickListener {
-                        startActivity(
-                            Intent(
-                                this@ProfileActivity,
-                                AdminPanelActivity::class.java
-                            )
-                        )
+                        startActivity(Intent(this, AdminPanelActivity::class.java))
                     }
                     Log.d("ADMIN_CHECK", "Admin user: ${user.uid}")
                 } else {
