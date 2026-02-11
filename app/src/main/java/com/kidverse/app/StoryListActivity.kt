@@ -23,19 +23,23 @@ class StoryListActivity : AppCompatActivity() {
         val spinner = findViewById<Spinner>(R.id.spFilter)
         val rv = findViewById<RecyclerView>(R.id.rvStories)
 
+        // 👑 Admin screen → Always premium, no limit
         adapter = StoryListAdapter(
-            stories,
-            onClick = {
+            list = stories,
+            isPremium = true,
+            freeLimit = Int.MAX_VALUE,
+            onPremiumRequired = {},
+            onClick = { story ->
                 val i = Intent(this, AddStoryActivity::class.java)
-                i.putExtra("storyId", it.id)
+                i.putExtra("storyId", story.id)
                 startActivity(i)
-            },
-            onLongClick = { confirmDelete(it) }
+            }
         )
 
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
 
+        // 🔽 Spinner Setup
         ArrayAdapter.createFromResource(
             this,
             R.array.story_filters,
@@ -79,20 +83,23 @@ class StoryListActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { snapshot ->
                 stories.clear()
+
                 for (doc in snapshot.documents) {
                     stories.add(
                         StoryItem(
                             id = doc.id,
                             title = doc.getString("title") ?: "",
+                            coverImage = doc.getString("coverImage") ?: "",
                             status = doc.getString("status") ?: "draft"
                         )
                     )
                 }
+
                 adapter.notifyDataSetChanged()
             }
     }
 
-
+    // 🗑 Long Press Delete (Admin Only)
     private fun confirmDelete(story: StoryItem) {
         AlertDialog.Builder(this)
             .setTitle("Delete Story")
