@@ -6,12 +6,16 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class BedtimeStoriesActivity : AppCompatActivity() {
 
     private val stories = mutableListOf<StoryItem>()
     private lateinit var adapter: StoryListAdapter
+
+    private val FREE_LIMIT = 5
+    private var isPremiumUser = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,22 +24,57 @@ class BedtimeStoriesActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerStories)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        checkPremiumStatus {
+            setupAdapter(recyclerView)
+            fetchBedtimeStories()
+        }
+    }
+
+    // 🔐 Load premium status
+    private fun checkPremiumStatus(onReady: () -> Unit) {
+
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user == null) {
+            isPremiumUser = false
+            onReady()
+            return
+        }
+
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(user.uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                isPremiumUser = doc.getBoolean("isPremium") ?: false
+                onReady()
+            }
+            .addOnFailureListener {
+                isPremiumUser = false
+                onReady()
+            }
+    }
+
+    private fun setupAdapter(recyclerView: RecyclerView) {
+
         adapter = StoryListAdapter(
             list = stories,
+            isPremium = isPremiumUser,
+            freeLimit = FREE_LIMIT,
+            onPremiumRequired = {
+                PremiumBottomSheet().show(
+                    supportFragmentManager,
+                    "PremiumSheet"
+                )
+            },
             onClick = { story ->
-                // 👉 Story Reader open
                 val intent = Intent(this, StoryReaderActivity::class.java)
                 intent.putExtra("storyId", story.id)
                 startActivity(intent)
-            },
-            onLongClick = {
-                // user side me kuch nahi
             }
         )
 
         recyclerView.adapter = adapter
-
-        fetchBedtimeStories()
     }
 
     private fun fetchBedtimeStories() {
@@ -46,6 +85,7 @@ class BedtimeStoriesActivity : AppCompatActivity() {
             .orderBy("updatedAt")
             .get()
             .addOnSuccessListener { docs ->
+
                 stories.clear()
 
                 for (doc in docs) {

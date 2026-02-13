@@ -14,9 +14,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 import kotlin.math.max
 
 class StoryReaderActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
@@ -25,7 +25,6 @@ class StoryReaderActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         private const val TAG = "STORY_READER"
     }
 
-    // 📖 Story
     private val blocks = mutableListOf<ContentBlock>()
     private lateinit var adapter: StoryContentAdapter
     private lateinit var prefs: SharedPreferences
@@ -33,29 +32,24 @@ class StoryReaderActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var currentTextSize = 18f
     private var currentFont: Typeface = Typeface.SANS_SERIF
 
-    // 📊 Reading session
     private var storyId: String? = null
     private var startReadTime = 0L
     private var hasSaved = false
-    private var maxReadPosition = 0
 
-    // 🔊 TTS
+    private var lastSavedScrollPosition: Long = 0L
+
+    private lateinit var rv: RecyclerView
+    private lateinit var btnSpeak: ImageButton
+
     private lateinit var tts: TextToSpeech
     private var ttsReady = false
-    private var isPaused = false
 
-    // 🔊 Paragraph-wise speaking
-    private val speakableBlocks = mutableListOf<Int>() // adapter positions
-    private var currentSpeakIndex = 0
-
-    private lateinit var btnSpeak: ImageButton
-    private lateinit var rv: RecyclerView
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_story_reader)
-
-        Log.d(TAG, "onCreate")
 
         startReadTime = System.currentTimeMillis()
 
@@ -72,50 +66,32 @@ class StoryReaderActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         val tvTitle = findViewById<TextView>(R.id.tvStoryTitle)
         rv = findViewById(R.id.rvContent)
-
-        val btnAPlus = findViewById<ImageButton>(R.id.btnAPlus)
-        val btnAMinus = findViewById<ImageButton>(R.id.btnAMinus)
-        val btnNightMode = findViewById<ImageButton>(R.id.btnNightMode)
-        val btnFont = findViewById<ImageButton>(R.id.btnFont)
         btnSpeak = findViewById(R.id.btnSpeak)
-
-        btnSpeak.isEnabled = false
 
         rv.layoutManager = LinearLayoutManager(this)
         adapter = StoryContentAdapter(blocks, currentTextSize, currentFont)
         rv.adapter = adapter
 
-        // 🔊 Init TTS
+        // Scroll tracking
+        rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(
+                recyclerView: RecyclerView,
+                dx: Int,
+                dy: Int
+            ) {
+                lastSavedScrollPosition += dy
+            }
+        })
+
         tts = TextToSpeech(this, this)
 
-        // ▶️ / ⏸ Play Pause
-        btnSpeak.setOnClickListener {
-            if (!ttsReady || speakableBlocks.isEmpty()) return@setOnClickListener
-
-            if (tts.isSpeaking) {
-                tts.stop()
-                isPaused = true
-                btnSpeak.setImageResource(R.drawable.ic_speaker)
-            } else {
-                if (!isPaused) {
-                    speakFrom(0)
-                } else {
-                    speakFrom(currentSpeakIndex)
-                }
-                isPaused = false
-                btnSpeak.setImageResource(R.drawable.ic_pause)
-            }
-        }
-
-        // 🔠 Text size +
-        btnAPlus.setOnClickListener {
+        findViewById<ImageButton>(R.id.btnAPlus).setOnClickListener {
             currentTextSize += 2f
             prefs.edit().putFloat("text_size", currentTextSize).apply()
             adapter.updateTextSize(currentTextSize)
         }
 
-        // 🔠 Text size –
-        btnAMinus.setOnClickListener {
+        findViewById<ImageButton>(R.id.btnAMinus).setOnClickListener {
             if (currentTextSize > 14f) {
                 currentTextSize -= 2f
                 prefs.edit().putFloat("text_size", currentTextSize).apply()
@@ -123,8 +99,7 @@ class StoryReaderActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
         }
 
-        // 🌙 Night mode
-        btnNightMode.setOnClickListener {
+        findViewById<ImageButton>(R.id.btnNightMode).setOnClickListener {
             val mode = AppCompatDelegate.getDefaultNightMode()
             AppCompatDelegate.setDefaultNightMode(
                 if (mode == AppCompatDelegate.MODE_NIGHT_YES)
@@ -135,8 +110,7 @@ class StoryReaderActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             recreate()
         }
 
-        // 🔤 Font switch
-        btnFont.setOnClickListener {
+        findViewById<ImageButton>(R.id.btnFont).setOnClickListener {
             currentFont = when (currentFont) {
                 Typeface.SANS_SERIF -> Typeface.SERIF
                 Typeface.SERIF -> Typeface.MONOSPACE
@@ -153,9 +127,7 @@ class StoryReaderActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             adapter.updateFont(currentFont)
         }
 
-        // 🔙 Back
         onBackPressedDispatcher.addCallback(this) {
-            tts.stop()
             saveReadingSession()
             finish()
         }
@@ -163,71 +135,19 @@ class StoryReaderActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         loadStory(tvTitle)
     }
 
-    // 🔊 TTS ready
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
             val result = tts.setLanguage(Locale.US)
             ttsReady =
                 result != TextToSpeech.LANG_MISSING_DATA &&
                         result != TextToSpeech.LANG_NOT_SUPPORTED
-
-            Log.d(TAG, "TTS ready=$ttsReady")
-
-            tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-
-                override fun onStart(utteranceId: String?) {
-                    val index =
-                        utteranceId?.removePrefix("para_")?.toIntOrNull() ?: return
-
-                    runOnUiThread {
-                        currentSpeakIndex = index
-                        val pos = speakableBlocks[index]
-                        adapter.highlight(pos)
-                        rv.smoothScrollToPosition(pos)
-                        maxReadPosition = max(maxReadPosition, pos)
-                    }
-                }
-
-                override fun onDone(utteranceId: String?) {
-                    val index =
-                        utteranceId?.removePrefix("para_")?.toIntOrNull() ?: return
-
-                    if (index + 1 < speakableBlocks.size) {
-                        speakFrom(index + 1)
-                    } else {
-                        runOnUiThread {
-                            btnSpeak.setImageResource(R.drawable.ic_speaker)
-                        }
-                    }
-                }
-
-                override fun onError(utteranceId: String?) {}
-            })
         }
     }
 
-    // 🔊 Speak paragraph-wise
-    private fun speakFrom(index: Int) {
-        if (!ttsReady || index !in speakableBlocks.indices) return
-
-        currentSpeakIndex = index
-        val blockPos = speakableBlocks[index]
-        val text = blocks[blockPos].value
-
-        tts.speak(
-            text,
-            TextToSpeech.QUEUE_FLUSH,
-            null,
-            "para_$index"
-        )
-    }
-
-    // 📥 Load story
     private fun loadStory(tvTitle: TextView) {
         val id = storyId ?: return
 
-        FirebaseFirestore.getInstance()
-            .collection("stories")
+        db.collection("stories")
             .document(id)
             .get()
             .addOnSuccessListener { doc ->
@@ -238,44 +158,59 @@ class StoryReaderActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     doc.get("content") as? List<Map<String, String>> ?: emptyList()
 
                 blocks.clear()
-                speakableBlocks.clear()
 
                 for (item in content) {
                     val type = item["type"] ?: ""
                     val value = item["value"] ?: ""
-
                     blocks.add(ContentBlock(type, value))
-
-                    if (type == "text" && value.isNotBlank()) {
-                        speakableBlocks.add(blocks.size - 1)
-                    }
                 }
 
                 adapter.notifyDataSetChanged()
-
-                btnSpeak.isEnabled = speakableBlocks.isNotEmpty()
+                restoreScrollPosition()
             }
     }
 
-    // 📊 Save reading session
+    private fun restoreScrollPosition() {
+
+        val user = auth.currentUser ?: return
+        val sid = storyId ?: return
+
+        db.collection("users")
+            .document(user.uid)
+            .get()
+            .addOnSuccessListener { doc ->
+
+                val lastStory = doc.getString("lastStoryId")
+                val lastPosition = doc.getLong("lastReadPosition") ?: 0L
+
+                if (lastStory == sid && lastPosition > 0) {
+                    rv.post {
+                        rv.scrollBy(0, lastPosition.toInt())
+                    }
+                }
+            }
+    }
+
     private fun saveReadingSession() {
+
         if (hasSaved) return
         hasSaved = true
 
+        val user = auth.currentUser ?: return
+        val sid = storyId ?: return
+
         val seconds = (System.currentTimeMillis() - startReadTime) / 1000
-        if (seconds < 10) return
+        if (seconds < 5) return
 
         val minutes = max(1, (seconds / 60).toInt())
         val words = countWordsTillScroll()
 
-        val user = FirebaseAuth.getInstance().currentUser ?: return
-        val sid = storyId ?: return
-        val title = findViewById<TextView>(R.id.tvStoryTitle).text.toString()
+        val title =
+            findViewById<TextView>(R.id.tvStoryTitle).text.toString()
 
         val docId = "${sid}_${todayKey()}"
 
-        FirebaseFirestore.getInstance()
-            .collection("users")
+        db.collection("users")
             .document(user.uid)
             .collection("readingHistory")
             .document(docId)
@@ -288,14 +223,35 @@ class StoryReaderActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     "wordsRead" to words
                 )
             )
+
+        val userRef = db.collection("users").document(user.uid)
+
+        userRef.update(
+            mapOf(
+                "lastStoryId" to sid,
+                "lastReadPosition" to lastSavedScrollPosition
+            )
+        )
+
+        val layoutManager =
+            rv.layoutManager as LinearLayoutManager
+        val lastVisible =
+            layoutManager.findLastCompletelyVisibleItemPosition()
+
+        if (lastVisible >= blocks.size - 1) {
+            userRef.update(
+                "completedStories",
+                FieldValue.arrayUnion(sid)
+            )
+        }
     }
 
     private fun countWordsTillScroll(): Int {
         var count = 0
-        for (i in 0..maxReadPosition) {
-            val block = blocks.getOrNull(i) ?: continue
+        for (block in blocks) {
             if (block.type == "text") {
-                count += block.value.trim().split("\\s+".toRegex()).size
+                count += block.value.trim()
+                    .split("\\s+".toRegex()).size
             }
         }
         return count

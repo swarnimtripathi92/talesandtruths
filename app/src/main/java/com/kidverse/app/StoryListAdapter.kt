@@ -4,14 +4,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 class StoryListAdapter(
     private val list: List<StoryItem>,
-    private val onClick: (StoryItem) -> Unit,
-    private val onLongClick: (StoryItem) -> Unit
+    private val isPremium: Boolean,
+    private val freeLimit: Int,
+    private val onPremiumRequired: () -> Unit,
+    private val onClick: (StoryItem) -> Unit
 ) : RecyclerView.Adapter<StoryListAdapter.VH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -21,6 +24,7 @@ class StoryListAdapter(
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
+
         val story = list[position]
 
         holder.title.text = story.title
@@ -30,10 +34,21 @@ class StoryListAdapter(
             .centerCrop()
             .into(holder.cover)
 
-        holder.itemView.setOnClickListener { onClick(story) }
-        holder.itemView.setOnLongClickListener {
-            onLongClick(story)
-            true
+        // 🔒 Lock logic
+        val isLocked = !isPremium && position >= freeLimit
+
+        if (isLocked) {
+            holder.lockOverlay.visibility = View.VISIBLE
+        } else {
+            holder.lockOverlay.visibility = View.GONE
+        }
+
+        holder.itemView.setOnClickListener {
+            if (isLocked) {
+                onPremiumRequired()
+            } else {
+                onClick(story)
+            }
         }
     }
 
@@ -42,5 +57,6 @@ class StoryListAdapter(
     class VH(v: View) : RecyclerView.ViewHolder(v) {
         val cover: ImageView = v.findViewById(R.id.ivCover)
         val title: TextView = v.findViewById(R.id.tvTitle)
+        val lockOverlay: LinearLayout = v.findViewById(R.id.lockOverlay)
     }
 }
