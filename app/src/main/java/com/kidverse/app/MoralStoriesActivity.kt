@@ -14,7 +14,6 @@ class MoralStoriesActivity : AppCompatActivity() {
     private val stories = mutableListOf<StoryItem>()
     private lateinit var adapter: StoryListAdapter
 
-    private val FREE_LIMIT = 1
     private var isPremiumUser = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +29,7 @@ class MoralStoriesActivity : AppCompatActivity() {
         }
     }
 
-    // 🔐 Load premium status
+    // 🔐 Check premium status (Unlogged = non-premium)
     private fun checkPremiumStatus(onReady: () -> Unit) {
 
         val user = FirebaseAuth.getInstance().currentUser
@@ -60,7 +59,6 @@ class MoralStoriesActivity : AppCompatActivity() {
         adapter = StoryListAdapter(
             list = stories,
             isPremium = isPremiumUser,
-            freeLimit = FREE_LIMIT,
             onPremiumRequired = {
                 PremiumBottomSheet().show(
                     supportFragmentManager,
@@ -68,9 +66,21 @@ class MoralStoriesActivity : AppCompatActivity() {
                 )
             },
             onClick = { story ->
-                val intent = Intent(this, StoryReaderActivity::class.java)
-                intent.putExtra("storyId", story.id)
-                startActivity(intent)
+
+                // 🔐 Premium gating logic
+                if (!isPremiumUser && story.isPremiumStory) {
+
+                    PremiumBottomSheet().show(
+                        supportFragmentManager,
+                        "PremiumSheet"
+                    )
+
+                } else {
+
+                    val intent = Intent(this, StoryReaderActivity::class.java)
+                    intent.putExtra("storyId", story.id)
+                    startActivity(intent)
+                }
             }
         )
 
@@ -78,6 +88,7 @@ class MoralStoriesActivity : AppCompatActivity() {
     }
 
     private fun fetchMoralStories() {
+
         FirebaseFirestore.getInstance()
             .collection("stories")
             .whereEqualTo("status", "published")
@@ -89,12 +100,14 @@ class MoralStoriesActivity : AppCompatActivity() {
                 stories.clear()
 
                 for (doc in docs) {
+
                     stories.add(
                         StoryItem(
                             id = doc.id,
                             title = doc.getString("title") ?: "",
                             coverImage = doc.getString("coverImage") ?: "",
-                            status = doc.getString("status") ?: ""
+                            status = doc.getString("status") ?: "",
+                            isPremiumStory = doc.getBoolean("isPremiumStory") ?: false
                         )
                     )
                 }

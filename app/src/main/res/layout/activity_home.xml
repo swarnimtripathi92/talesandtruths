@@ -14,55 +14,60 @@
 
         <!-- 🌈 HEADER IMAGE -->
         <FrameLayout
+            android:id="@+id/headerContainer"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="220dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_header_round"
             android:clipToOutline="true">
 
+            <!-- Background Image -->
             <ImageView
                 android:id="@+id/ivHeader"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/header_kids_story" />
-        </FrameLayout>
 
-        <!-- 🏷 APP TITLE CARD -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            app:cardCornerRadius="26dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="#EEF2FF">
-
-            <LinearLayout
+            <!-- Gradient Overlay -->
+            <View
+                android:id="@+id/headerOverlay"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/header_gradient_overlay"/>
+
+            <!-- Branding Text -->
+            <LinearLayout
+                android:id="@+id/headerTextContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:padding="22dp">
+                android:gravity="bottom"
+                android:padding="20dp">
 
                 <TextView
+                    android:id="@+id/tvAppName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tales and Truths 🌈"
+                    android:text="KidVerse 🌈"
                     android:textSize="26sp"
                     android:textStyle="bold"
-                    android:textColor="#2E3A8C" />
+                    android:textColor="@android:color/white"/>
 
                 <TextView
+                    android:id="@+id/tvTagline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Stories that teach kindness and courage"
-                    android:textSize="15sp"
-                    android:textColor="#4254D4"
-                    android:layout_marginTop="6dp" />
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="4dp"/>
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
-        <!-- 🌟 FEATURED STORY -->
+        </FrameLayout>
+
+
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardFeatured"
             android:layout_width="match_parent"
@@ -70,86 +75,144 @@
             android:layout_marginBottom="18dp"
             android:clickable="true"
             android:focusable="true"
-            app:cardCornerRadius="22dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="6dp"
             app:cardBackgroundColor="#FFF8E1">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="16dp">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🌟 Today’s Featured Story"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#E65100"/>
+                <!-- 📷 Featured Cover -->
+                <ImageView
+                    android:id="@+id/ivFeaturedCover"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/header_kids_story" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tap to explore something special!"
-                    android:textSize="14sp"
-                    android:textColor="#BF360C"
-                    android:layout_marginTop="6dp"/>
+                <!-- 📝 Text Side -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="6"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tvFeaturedTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Today’s Featured Story"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#E65100"/>
+
+                    <TextView
+                        android:id="@+id/tvFeaturedSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tap to explore something special!"
+                        android:textSize="14sp"
+                        android:textColor="#BF360C"
+                        android:layout_marginTop="6dp"/>
+
+                </LinearLayout>
 
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardKeepReading"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_marginBottom="24dp"
+            android:layout_height="130dp"
+            android:layout_marginBottom="20dp"
             android:clickable="true"
             android:focusable="true"
-            app:cardCornerRadius="30dp"
-            app:cardElevation="12dp"
-            app:cardBackgroundColor="#5B6CFF">
+            app:cardCornerRadius="28dp"
+            app:cardElevation="10dp"
+            app:cardBackgroundColor="#7C8CFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="20dp">
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
 
-                <!-- Main CTA -->
+                <!-- 📖 Icon -->
+                <ImageView
+                    android:id="@+id/ivContinueIcon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_placeholder_book"
+                    android:layout_marginEnd="14dp" />
+
+
+                <!-- 📚 Text Section -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvContinueTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Continue Reading 📖"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"/>
+
+                    <TextView
+                        android:id="@+id/tvLastStory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="@android:color/white"
+                        android:layout_marginTop="4dp"
+                        android:visibility="gone"/>
+
+
+                    <TextView
+                        android:id="@+id/tvReadingStats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔥 3 stories this week"
+                        android:textSize="12sp"
+                        android:textColor="@android:color/white"
+                        android:layout_marginTop="4dp"/>
+
+                    <!-- 📊 Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressReading"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        android:layout_marginTop="8dp"
+                        android:max="100"
+                        android:progress="60"
+                        android:progressTint="@android:color/white"
+                        android:progressBackgroundTint="#B0B8FF"/>
+                </LinearLayout>
+
+                <!-- 👉 Arrow -->
                 <TextView
-                    android:id="@+id/tvContinueTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="📚 Continue Reading"
+                    android:text="➡"
                     android:textSize="22sp"
-                    android:textStyle="bold"
                     android:textColor="@android:color/white"/>
-
-                <!-- Subtitle -->
-                <TextView
-                    android:id="@+id/tvContinueSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Resume your magical journey ✨"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/white"
-                    android:layout_marginTop="6dp"/>
-
-                <!-- Weekly Progress -->
-                <TextView
-                    android:id="@+id/tvReadingStats"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🔥 You read 3 stories this week"
-                    android:textSize="13sp"
-                    android:textColor="@android:color/white"
-                    android:layout_marginTop="10dp"/>
-
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
+
 
         <!-- 🧩 SECTION TITLE -->
         <TextView

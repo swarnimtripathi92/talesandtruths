@@ -31,6 +31,7 @@ class KidsStoriesActivity : AppCompatActivity() {
         }
     }
 
+    // 🔐 Check premium status (Unlogged = non-premium)
     private fun checkPremiumStatus(onReady: () -> Unit) {
 
         val user = FirebaseAuth.getInstance().currentUser
@@ -59,7 +60,6 @@ class KidsStoriesActivity : AppCompatActivity() {
         adapter = StoryListAdapter(
             list = stories,
             isPremium = isPremiumUser,
-            freeLimit = if (isPremiumUser) Int.MAX_VALUE else 10,
             onPremiumRequired = {
                 PremiumBottomSheet().show(
                     supportFragmentManager,
@@ -67,9 +67,20 @@ class KidsStoriesActivity : AppCompatActivity() {
                 )
             },
             onClick = { story ->
-                val intent = Intent(this, StoryReaderActivity::class.java)
-                intent.putExtra("storyId", story.id)
-                startActivity(intent)
+
+                if (!isPremiumUser && story.isPremiumStory) {
+
+                    PremiumBottomSheet().show(
+                        supportFragmentManager,
+                        "PremiumSheet"
+                    )
+
+                } else {
+
+                    val intent = Intent(this, StoryReaderActivity::class.java)
+                    intent.putExtra("storyId", story.id)
+                    startActivity(intent)
+                }
             }
         )
 
@@ -89,25 +100,22 @@ class KidsStoriesActivity : AppCompatActivity() {
 
     private fun fetchCategory(category: String, onComplete: () -> Unit) {
 
-        var query = firestore.collection("stories")
+        firestore.collection("stories")
             .whereEqualTo("status", "published")
             .whereEqualTo("category", category)
-            .orderBy("updatedAt", Query.Direction.ASCENDING) // oldest first
-
-        if (!isPremiumUser) {
-            query = query.limit(5) // 5 per category
-        }
-
-        query.get()
+            .orderBy("updatedAt", Query.Direction.ASCENDING)
+            .get()
             .addOnSuccessListener { docs ->
 
                 for (doc in docs) {
+
                     stories.add(
                         StoryItem(
                             id = doc.id,
                             title = doc.getString("title") ?: "",
                             coverImage = doc.getString("coverImage") ?: "",
-                            status = doc.getString("status") ?: ""
+                            status = doc.getString("status") ?: "",
+                            isPremiumStory = doc.getBoolean("isPremiumStory") ?: false
                         )
                     )
                 }

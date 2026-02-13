@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 class StoryListAdapter(
     private val list: List<StoryItem>,
     private val isPremium: Boolean,
-    private val freeLimit: Int,
     private val onPremiumRequired: () -> Unit,
     private val onClick: (StoryItem) -> Unit
 ) : RecyclerView.Adapter<StoryListAdapter.VH>() {
@@ -34,8 +33,8 @@ class StoryListAdapter(
             .centerCrop()
             .into(holder.cover)
 
-        // 🔒 Lock logic
-        val isLocked = !isPremium && position >= freeLimit
+        // 🔒 New Premium Lock Logic
+        val isLocked = !isPremium && story.isPremiumStory
 
         if (isLocked) {
             holder.lockOverlay.visibility = View.VISIBLE
