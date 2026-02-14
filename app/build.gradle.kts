@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
     kotlin("kapt")
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
@@ -47,6 +48,8 @@ dependencies {
 
     // 🔹 AndroidX core
     implementation(libs.androidx.core.ktx)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
@@ -70,6 +73,7 @@ dependencies {
 
     // 🖼 Glide
     implementation(libs.glide)
+    implementation(libs.firebase.crashlytics)
     kapt(libs.glideCompiler)
 
     // 🧪 Testing

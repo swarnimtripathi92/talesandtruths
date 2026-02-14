@@ -9,6 +9,8 @@ appcompat = "1.7.1"
 material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
+firebaseCrashlytics = "20.0.4"
+googleFirebaseCrashlytics = "3.0.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -22,9 +24,11 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.16.0" }
 glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version = "4.16.0" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.2" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }

@@ -4,4 +4,5 @@ plugins {
 
     // 🔥 Firebase ke liye REQUIRED
     alias(libs.plugins.google.services) apply false
+    alias(libs.plugins.google.firebase.crashlytics) apply false
 }

@@ -19,6 +19,10 @@ class HomeActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private var featuredStoryId: String? = null
 
+    private val prefs by lazy {
+        getSharedPreferences("kidverse_prefs", MODE_PRIVATE)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -31,25 +35,28 @@ class HomeActivity : AppCompatActivity() {
             animateCard(cardFeatured)
             featuredStoryId?.let { openStory(it) }
         }
-        // 🐯 Moral
+
+        // 📚 Continue Reading (INSTANT)
+        cardKeepReading.setOnClickListener {
+            animateCard(cardKeepReading)
+            handleKeepReading()
+        }
+
         findViewById<MaterialCardView>(R.id.cardMoral)
             .setOnClickListener {
                 startActivity(Intent(this, MoralStoriesActivity::class.java))
             }
 
-        // 🌙 Bedtime
         findViewById<MaterialCardView>(R.id.cardBedtime)
             .setOnClickListener {
                 startActivity(Intent(this, BedtimeStoriesActivity::class.java))
             }
 
-        // 🧠 GK
         findViewById<MaterialCardView>(R.id.cardKidsInfotainment)
             .setOnClickListener {
                 startActivity(Intent(this, KidsInfotainmentActivity::class.java))
             }
 
-        // 👑 Premium
         findViewById<MaterialCardView>(R.id.cardPremiumBanner)
             .setOnClickListener {
                 PremiumBottomSheet().show(
@@ -58,23 +65,17 @@ class HomeActivity : AppCompatActivity() {
                 )
             }
 
-        // 🔒 Parent Zone
         findViewById<MaterialCardView>(R.id.btnParentZone)
             .setOnClickListener {
                 startActivity(Intent(this, ProfileActivity::class.java))
             }
-        // 📚 Continue Reading
-        cardKeepReading.setOnClickListener {
-            animateCard(cardKeepReading)
-            handleKeepReading()
-        }
 
         loadFeaturedStory()
         updateReadingStats()
     }
 
     // --------------------------------------------
-    // ✨ Card Animation
+    // ✨ Animation
     // --------------------------------------------
 
     private fun animateCard(view: View) {
@@ -93,7 +94,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     // --------------------------------------------
-    // 🌟 Daily Featured Story
+    // 🌟 Daily Featured
     // --------------------------------------------
 
     private fun loadFeaturedStory() {
@@ -109,7 +110,8 @@ class HomeActivity : AppCompatActivity() {
             .document(currentUser.uid)
             .get()
             .addOnSuccessListener { userSnapshot ->
-                val isUserPremium = userSnapshot.getBoolean("isPremium") ?: false
+                val isUserPremium =
+                    userSnapshot.getBoolean("isPremium") ?: false
                 loadFeaturedPreview(isUserPremium)
             }
             .addOnFailureListener {
@@ -133,7 +135,6 @@ class HomeActivity : AppCompatActivity() {
                 if (snapshot.isEmpty) return@addOnSuccessListener
 
                 val docs = snapshot.documents
-
                 val todayKey = getTodayKey()
                 val index = abs(todayKey.hashCode()) % docs.size
                 val dailyDoc = docs[index]
@@ -148,7 +149,7 @@ class HomeActivity : AppCompatActivity() {
                 Glide.with(this)
                     .load(cover)
                     .centerCrop()
-                    .into(findViewById<ImageView>(R.id.ivFeaturedCover))
+                    .into(findViewById(R.id.ivFeaturedCover))
             }
     }
 
@@ -158,34 +159,17 @@ class HomeActivity : AppCompatActivity() {
     }
 
     // --------------------------------------------
-    // 📖 Continue Reading
+    // 📖 Continue Reading (NEXT LEVEL FAST)
     // --------------------------------------------
 
     private fun handleKeepReading() {
 
-        val user = FirebaseAuth.getInstance().currentUser
+        val lastStoryId = prefs.getString("lastReadStoryId", null)
 
-        if (user != null) {
-            db.collection("users")
-                .document(user.uid)
-                .get()
-                .addOnSuccessListener { userDoc ->
-                    val lastStoryId = userDoc.getString("lastReadStoryId")
-                    if (lastStoryId != null) {
-                        openStory(lastStoryId)
-                    } else {
-                        showStartReadingDialog()
-                    }
-                }
+        if (lastStoryId != null) {
+            openStory(lastStoryId)
         } else {
-            val prefs = getSharedPreferences("kidverse_prefs", MODE_PRIVATE)
-            val lastStoryId = prefs.getString("lastReadStoryId", null)
-
-            if (lastStoryId != null) {
-                openStory(lastStoryId)
-            } else {
-                showStartReadingDialog()
-            }
+            showStartReadingDialog()
         }
     }
 
@@ -207,7 +191,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     // --------------------------------------------
-    // 🔥 Continue Reading Preview
+    // 🔥 Preview (Fast Local First)
     // --------------------------------------------
 
     private fun updateReadingStats() {
@@ -216,34 +200,18 @@ class HomeActivity : AppCompatActivity() {
         val tvTitle = findViewById<TextView>(R.id.tvContinueTitle)
         val imageView = findViewById<ImageView>(R.id.ivContinueIcon)
 
-        val user = FirebaseAuth.getInstance().currentUser
+        val lastStoryId = prefs.getString("lastReadStoryId", null)
 
-        if (user != null) {
-            db.collection("users")
-                .document(user.uid)
-                .get()
-                .addOnSuccessListener { userDoc ->
-                    val lastStoryId = userDoc.getString("lastReadStoryId")
-
-                    if (lastStoryId != null) {
-                        loadStoryPreview(lastStoryId)
-                    } else {
-                        tvLast.visibility = View.GONE
-                        tvTitle.text = "Start Your First Story 📖"
-                    }
-                }
-
+        if (lastStoryId != null) {
+            loadStoryPreview(lastStoryId)
         } else {
-            val prefs = getSharedPreferences("kidverse_prefs", MODE_PRIVATE)
-            val lastStoryId = prefs.getString("lastReadStoryId", null)
-
-            if (lastStoryId != null) {
-                loadStoryPreview(lastStoryId)
-            } else {
-                tvLast.visibility = View.GONE
-                tvTitle.text = "Start Your First Story 📖"
-            }
+            tvLast.visibility = View.GONE
+            tvTitle.text = "Start Your First Story 📖"
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        updateReadingStats()
     }
 
     private fun loadStoryPreview(storyId: String) {
@@ -256,16 +224,20 @@ class HomeActivity : AppCompatActivity() {
                 val title = storyDoc.getString("title") ?: return@addOnSuccessListener
                 val cover = storyDoc.getString("coverImage") ?: ""
 
-                val tvLast = findViewById<TextView>(R.id.tvLastStory)
-                val imageView = findViewById<ImageView>(R.id.ivContinueIcon)
+                prefs.edit()
+                    .putString("lastReadStoryTitle", title)
+                    .putString("lastReadStoryCover", cover)
+                    .apply()
 
-                tvLast.text = "Last: $title"
-                tvLast.visibility = View.VISIBLE
+                findViewById<TextView>(R.id.tvLastStory).apply {
+                    text = "Last: $title"
+                    visibility = View.VISIBLE
+                }
 
                 Glide.with(this)
                     .load(cover)
                     .centerCrop()
-                    .into(imageView)
+                    .into(findViewById(R.id.ivContinueIcon))
             }
     }
 }

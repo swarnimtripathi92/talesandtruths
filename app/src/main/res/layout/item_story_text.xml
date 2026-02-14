@@ -3,8 +3,18 @@
     android:id="@+id/tvText"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+
     android:textSize="18sp"
     android:lineSpacingExtra="6dp"
     android:textColor="?attr/colorOnSurface"
+
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     android:paddingTop="12dp"
-    android:paddingBottom="12dp" />
+    android:paddingBottom="12dp"
+
+    android:textAlignment="viewStart"
+    android:gravity="start"
+
+
+    android:singleLine="false" />
