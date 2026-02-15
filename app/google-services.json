@@ -1,0 +1,92 @@
+{
+  "project_info": {
+    "project_number": "849108116618",
+    "project_id": "talesandtruths-4733a",
+    "storage_bucket": "talesandtruths-4733a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849108116618:android:018751349621243455b973",
+        "android_client_info": {
+          "package_name": "com.example.talesandtruths"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "849108116618-u3gstguk6td4uubanbndu8qiopost3pj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.talesandtruths",
+            "certificate_hash": "a39840b94c9695f49886334366e4a7ec40455f3d"
+          }
+        },
+        {
+          "client_id": "849108116618-p3r7tjd6cc84hq06jpka83g8lbrudo29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgfRTA17_YRBbV5_8w_egxvL0vYFCzLO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "849108116618-p3r7tjd6cc84hq06jpka83g8lbrudo29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849108116618:android:6ae7b98a2c05c62e55b973",
+        "android_client_info": {
+          "package_name": "com.kidverse.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "849108116618-4b8beonl2qn60jjocphj35l3cut54qcv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kidverse.app",
+            "certificate_hash": "a39840b94c9695f49886334366e4a7ec40455f3d"
+          }
+        },
+        {
+          "client_id": "849108116618-qb48ojaod60m3s3l178dfjck28vkn8u1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kidverse.app",
+            "certificate_hash": "a5412d68c9e13d73a6c7b1f401b9fca903807bd9"
+          }
+        },
+        {
+          "client_id": "849108116618-p3r7tjd6cc84hq06jpka83g8lbrudo29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgfRTA17_YRBbV5_8w_egxvL0vYFCzLO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "849108116618-p3r7tjd6cc84hq06jpka83g8lbrudo29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
