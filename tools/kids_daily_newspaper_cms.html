@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KidVerse Ultra CMS</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
@@ -16,1006 +12,563 @@
 
   <style>
     :root {
-      --bg: #070a1e;
-      --panel: #0f1739;
-      --panel-2: #111e48;
+      --bg: #070b1f;
+      --panel: #101839;
       --card: #151f49;
       --line: #2c4384;
-      --line-soft: #2a376a;
-      --text: #eaf1ff;
-      --muted: #a9bbe8;
-      --accent: #6c8bff;
-      --accent-2: #2fd2ff;
-      --good: #4ddb7a;
-      --warn: #ffc656;
-      --danger: #ff6f8e;
-      --radius: 16px;
+      --text: #ecf2ff;
+      --muted: #a6b7e8;
+      --accent: #6f8bff;
+      --accent2: #32d1ff;
+      --danger: #f06287;
+      --ok: #35d579;
+      --radius: 14px;
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
+      font-family: Inter, system-ui, Arial, sans-serif;
       color: var(--text);
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      background: radial-gradient(circle at 20% -20%, #2d46a2 0%, #11173f 35%, #070a1e 65%);
-      min-height: 100vh;
+      background: radial-gradient(circle at 20% -10%, #2f46a0 0%, #11173f 42%, #070b1f 74%);
     }
-
-    .app {
-      display: grid;
-      grid-template-columns: 280px minmax(0, 1fr);
-      min-height: 100vh;
-    }
-
-    .side {
-      padding: 20px;
-      border-right: 1px solid #2b3f7d;
-      background: linear-gradient(180deg, #0f1738, #0a1030);
-    }
-
-    .logo {
-      font-family: "Baloo 2", system-ui, sans-serif;
-      font-size: 34px;
-      line-height: 1;
-      margin: 2px 0;
-      letter-spacing: .2px;
-    }
-
-    .tag {
-      margin: 8px 0 18px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .catBtn {
-      width: 100%;
-      border: 1px solid #2f4b97;
-      border-radius: 12px;
-      color: #dce8ff;
-      background: #131f4d;
-      padding: 11px 12px;
-      margin-bottom: 10px;
-      text-align: left;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
-    }
-
-    .catBtn:hover { transform: translateY(-1px); }
-
-    .catBtn.active {
-      color: #fff;
-      border-color: transparent;
-      background: linear-gradient(100deg, #5e77ff 0%, #31cbff 100%);
-      box-shadow: 0 12px 24px rgba(57, 125, 255, .35);
-    }
-
-    .sideFoot {
-      margin-top: 14px;
-      border-top: 1px dashed #314786;
-      padding-top: 10px;
-      color: #95a7d9;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .content {
+    .app { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+    aside {
+      border-right: 1px solid #2e4687;
       padding: 18px;
+      background: linear-gradient(180deg, #0f1739, #0b1131);
     }
+    .logo { font-size: 30px; font-weight: 900; margin-bottom: 6px; }
+    .tag { color: var(--muted); font-size: 12px; margin-bottom: 14px; }
+    .catBtn {
+      width: 100%; border: 1px solid #2f4b95; background: #13204f; color: #dce8ff; border-radius: 12px;
+      padding: 10px 12px; margin-bottom: 9px; text-align: left; cursor: pointer; font-weight: 700;
+    }
+    .catBtn.active { border: 0; background: linear-gradient(95deg, #5f7aff, #2fcaff); color: #fff; }
 
+    main { padding: 16px; }
     .hero {
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: linear-gradient(120deg, #1a2f71 0%, #162455 45%, #16415e 100%);
-      padding: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 16px 28px rgba(10, 20, 60, .35);
-    }
-
-    .hero h1 {
-      margin: 0;
-      font-family: "Baloo 2", system-ui, sans-serif;
-      font-size: clamp(28px, 3vw, 36px);
-      line-height: 1;
-    }
-
-    .hero p {
-      margin: 8px 0 0;
-      color: #d1e2ff;
-      font-weight: 600;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .card {
-      grid-column: span 12;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, #172457 0%, #141f49 100%);
       padding: 14px;
-      box-shadow: 0 10px 22px rgba(8, 14, 45, .34);
+      margin-bottom: 12px;
+      background: linear-gradient(120deg, #1a2f72, #162557 50%, #16445f);
     }
-
-    .span4 { grid-column: span 4; }
-    .span5 { grid-column: span 5; }
-    .span6 { grid-column: span 6; }
-    .span7 { grid-column: span 7; }
-    .span8 { grid-column: span 8; }
-
-    h2, h3 {
-      margin: 0 0 10px;
-      line-height: 1.1;
-    }
-
-    h2 {
-      font-family: "Baloo 2", system-ui, sans-serif;
-      color: #dbe7ff;
-      font-size: 26px;
-    }
-
-    h3 {
-      font-family: "Baloo 2", system-ui, sans-serif;
-      color: #dbe6ff;
-      font-size: 23px;
-    }
-
-    .muted { color: var(--muted); }
-
-    .field { margin-bottom: 10px; }
-
-    label {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .45px;
-      font-weight: 800;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      color: #e9f1ff;
-      background: #0f183e;
-      border: 1px solid #3a54a6;
-      border-radius: 10px;
-      padding: 10px;
-      font: inherit;
-    }
-
-    textarea { min-height: 84px; resize: vertical; }
-
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: #85a0ff;
-      box-shadow: 0 0 0 4px rgba(95, 131, 255, .2);
-    }
-
-    .row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    button {
-      border: 0;
-      border-radius: 10px;
-      background: linear-gradient(180deg, #6b89ff 0%, #526ae2 100%);
-      color: #fff;
-      font: inherit;
-      font-weight: 800;
-      padding: 9px 12px;
-      cursor: pointer;
-    }
-
-    button.secondary {
-      color: #e6eeff;
-      background: linear-gradient(180deg, #3856a3 0%, #2b4586 100%);
-    }
-
-    button.danger {
-      background: linear-gradient(180deg, #e9658a 0%, #be3f65 100%);
-    }
-
-    button.success {
-      background: linear-gradient(180deg, #35d77b 0%, #1ea85d 100%);
-    }
+    .hero h1 { margin: 0; font-size: 28px; }
+    .hero p { margin: 6px 0 0; color: #d0ddff; }
 
     .module.hidden { display: none; }
-
-    .hint {
-      color: #9cb0e6;
-      font-size: 12px;
-      margin-top: 4px;
+    .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px; }
+    .card {
+      grid-column: span 12; border: 1px solid var(--line); border-radius: var(--radius);
+      background: linear-gradient(180deg, #17255a, #141f4a); padding: 12px;
     }
+    .span4 { grid-column: span 4; } .span5 { grid-column: span 5; } .span6 { grid-column: span 6; }
+    .span7 { grid-column: span 7; } .span8 { grid-column: span 8; }
+
+    h2,h3 { margin: 0 0 9px; }
+    h3 { font-size: 21px; }
+
+    .field { margin-bottom: 9px; }
+    label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; font-weight: 800; }
+    input, textarea, select {
+      width: 100%; border-radius: 10px; border: 1px solid #3a56a6; background: #0f193f; color: #ecf2ff; padding: 9px;
+      font: inherit;
+    }
+    textarea { min-height: 76px; resize: vertical; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    button {
+      border: 0; border-radius: 10px; background: linear-gradient(180deg, #6f8bff, #4f67df); color: #fff;
+      font: inherit; font-weight: 800; padding: 8px 11px; cursor: pointer;
+    }
+    button.secondary { background: linear-gradient(180deg, #3a57a4, #2d4688); }
+    button.danger { background: linear-gradient(180deg, #eb6b90, #c3436a); }
+    button.ok { background: linear-gradient(180deg, #37d97e, #1fa75f); }
 
     .tableWrap { overflow-x: auto; }
+    table { width: 100%; min-width: 600px; border-collapse: collapse; font-size: 13px; }
+    th,td { border-bottom: 1px solid #314a8f; text-align: left; padding: 8px; }
+    th { color: #9fb3eb; font-size: 11px; text-transform: uppercase; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 640px;
-      font-size: 13px;
-    }
-
-    th, td {
-      border-bottom: 1px solid #314a8f;
-      text-align: left;
-      padding: 8px;
-      vertical-align: top;
-    }
-
-    th {
-      color: #9eb3ec;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .5px;
-    }
-
-    .pill {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: #2b437f;
-      color: #dce8ff;
-    }
-
-    .storyBlock {
-      border: 1px dashed #4b67c0;
-      border-radius: 10px;
-      margin-bottom: 8px;
-      padding: 8px;
+    .storyBlock, .factBox, .sectionBox {
+      border: 1px dashed #4c69c0; border-radius: 10px; padding: 8px; margin-bottom: 8px; background: #0f193f;
       position: relative;
-      background: #0f183e;
     }
-
-    .storyBlock .remove {
-      position: absolute;
-      right: 6px;
-      top: 6px;
-      padding: 4px 8px;
-      border-radius: 8px;
-      background: #8e2e4a;
-      font-size: 12px;
+    .removeBtn {
+      position: absolute; top: 6px; right: 6px; border-radius: 8px; background: #8a2d49; font-size: 12px; padding: 4px 7px;
     }
-
-    .editor {
-      min-height: 90px;
-      border: 1px solid #3f5db8;
-      border-radius: 8px;
-      padding: 8px;
-      margin-top: 6px;
-      background: #0a1231;
-    }
-
-    .factBox {
-      border: 1px dashed #4a67bd;
-      border-radius: 10px;
-      padding: 8px;
-      margin: 8px 0;
-      background: #101945;
-    }
+    .editor { min-height: 90px; border: 1px solid #415fba; border-radius: 8px; padding: 8px; background: #0b1233; }
 
     .categoryItem {
-      border: 1px solid #30488d;
-      background: #131f4b;
-      border-radius: 10px;
-      padding: 8px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 13px;
+      border: 1px solid #324b8f; border-radius: 10px; padding: 8px; margin-bottom: 7px; cursor: pointer;
+      background: #13204f; font-size: 13px; font-weight: 700;
     }
+    .categoryItem.active { border: 0; background: linear-gradient(95deg, #5f7aff, #2fcaff); }
 
-    .categoryItem.active {
-      border-color: transparent;
-      background: linear-gradient(95deg, #5f79ff, #30ccff);
-      color: #fff;
+    .previewPaper {
+      min-height: 520px; border-radius: 16px; border: 1px solid #d5e0ff; background: #f7faff; color: #16234f; padding: 12px;
     }
+    .previewPaper h4 { margin: 0 0 8px; }
+    .previewPaper img { width: 100%; border-radius: 10px; border: 1px solid #d9e1ff; }
+    .npSection { border: 1px solid #dbe3ff; border-radius: 12px; padding: 10px; background: #fff; margin-top: 9px; }
+    .npTitle { font-weight: 800; margin-bottom: 6px; font-size: 18px; }
 
-    #phonePreview {
-      max-width: 320px;
-      min-height: 450px;
-      background: #f5f9ff;
-      color: #11214e;
-      border-radius: 24px;
-      border: 8px solid #0f183f;
-      padding: 10px;
-    }
+    .kpi { border: 1px solid #324b90; border-radius: 12px; background: #111b43; padding: 10px; }
+    .kpi b { display: block; font-size: 25px; margin-top: 4px; }
 
-    #phonePreview img {
-      width: 100%;
-      border-radius: 8px;
-      margin-top: 8px;
-    }
-
-    .kpi {
-      border: 1px solid #324b91;
-      border-radius: 12px;
-      background: #111c45;
-      padding: 10px;
-    }
-
-    .kpi b {
-      display: block;
-      font-size: 25px;
-      margin-top: 4px;
-    }
-
-    @media (max-width: 1020px) {
+    @media (max-width: 1100px) {
       .app { grid-template-columns: 1fr; }
-      .span4, .span5, .span6, .span7, .span8 { grid-column: span 12; }
-      #phonePreview { max-width: 100%; }
+      .span4,.span5,.span6,.span7,.span8 { grid-column: span 12; }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside class="side">
-      <div class="logo">KidVerse CMS</div>
-      <div class="tag">Ultra modern, functionality-rich command center</div>
+<div class="app">
+  <aside>
+    <div class="logo">KidVerse CMS</div>
+    <div class="tag">Full-featured control center for stories + GK + newspaper + magazines + analytics</div>
 
-      <button class="catBtn active" data-module="stories">📚 Story Studio</button>
-      <button class="catBtn" data-module="gk">🌍 Static GK Builder</button>
-      <button class="catBtn" data-module="daily">🗞️ Daily Newspaper</button>
-      <button class="catBtn" data-module="monthly">📘 Monthly Magazine</button>
-      <button class="catBtn" data-module="analytics">📊 Data and Analysis</button>
+    <button class="catBtn active" data-module="stories">📚 Story Studio</button>
+    <button class="catBtn" data-module="gk">🌍 Static GK Builder</button>
+    <button class="catBtn" data-module="daily">🗞️ Daily Newspaper</button>
+    <button class="catBtn" data-module="monthly">📘 Monthly Magazine</button>
+    <button class="catBtn" data-module="analytics">📊 Data and Analysis</button>
+  </aside>
 
-      <div class="sideFoot">
-        Firebase project is already wired. Replace <code>PASTE_KEY</code> with your key and start publishing instantly.
+  <main>
+    <section class="hero">
+      <h1 id="heroTitle">Story Studio</h1>
+      <p id="heroSubtitle">Create rich multimedia stories with block editor and live preview.</p>
+    </section>
+
+    <!-- Stories -->
+    <section id="stories" class="module">
+      <div class="grid">
+        <div class="card span7">
+          <h3>Story Editor</h3>
+          <div class="field"><label>Title</label><input id="storyTitle" /></div>
+          <div class="field"><label>Category</label><input id="storyCategory" /></div>
+          <div class="field"><label>Publish Time</label><input type="datetime-local" id="storyPublishAt" /></div>
+          <div class="row" style="margin-bottom:10px;"><label><input type="checkbox" id="storyFeatured"> Featured</label><label><input type="checkbox" id="storyPremium"> Premium</label></div>
+          <div class="field"><label>Cover</label><input type="file" id="storyCover" accept="image/*" /></div>
+          <h3>Blocks</h3>
+          <div id="storyBlocks"></div>
+          <div class="row">
+            <button onclick="addTextBlock()">+ Text</button>
+            <button class="secondary" onclick="addImageBlock()">+ Image</button>
+            <button class="ok" onclick="saveStory()">Save Story</button>
+            <button class="secondary" onclick="resetStoryEditor()">Reset</button>
+          </div>
+        </div>
+        <div class="card span5"><h3>Live Story Preview</h3><div class="previewPaper" id="storyPreview"></div></div>
+
+        <div class="card tableWrap">
+          <h3>Stories</h3>
+          <table>
+            <thead><tr><th>Title</th><th>Category</th><th>Views</th><th>Flags</th><th>Actions</th></tr></thead>
+            <tbody id="storiesTable"></tbody>
+          </table>
+        </div>
       </div>
-    </aside>
+    </section>
 
-    <main class="content">
-      <section class="hero">
-        <h1 id="heroTitle">Story Studio</h1>
-        <p id="heroSubtitle">Create rich multimedia stories with blocks, scheduling, premium flags, and instant mobile preview.</p>
-      </section>
-
-      <section id="stories" class="module">
-        <div class="grid">
-          <div class="card span7">
-            <h3>Story Editor</h3>
-            <div class="field"><label>Story Title</label><input id="storyTitle" placeholder="The Mystery of Moonlight Forest" /></div>
-            <div class="field"><label>Category</label><input id="storyCategory" placeholder="Adventure" /></div>
-            <div class="field"><label>Publish Time (optional)</label><input type="datetime-local" id="storyPublishAt" /></div>
-            <div class="row" style="margin-bottom:10px;">
-              <label><input type="checkbox" id="storyFeatured" /> Featured</label>
-              <label><input type="checkbox" id="storyPremium" /> Premium</label>
-            </div>
-            <div class="field"><label>Cover Image</label><input type="file" id="storyCover" accept="image/*" /></div>
-
-            <h3>Content Blocks</h3>
-            <div id="storyBlocks"></div>
-            <div class="row">
-              <button onclick="addTextBlock()">+ Text Block</button>
-              <button class="secondary" onclick="addImageBlock()">+ Image Block</button>
-              <button class="success" onclick="saveStory()">Save Story</button>
-              <button class="secondary" onclick="resetStoryEditor()">Reset Editor</button>
-            </div>
-          </div>
-
-          <div class="card span5">
-            <h3>📱 Live Mobile Preview</h3>
-            <div id="phonePreview"></div>
-          </div>
-
-          <div class="card tableWrap">
-            <h3>Stories in Firestore</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Category</th>
-                  <th>Views</th>
-                  <th>Flags</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="storiesTable"></tbody>
-            </table>
-          </div>
+    <!-- GK -->
+    <section id="gk" class="module hidden">
+      <div class="grid">
+        <div class="card span4">
+          <h3>Categories</h3>
+          <div id="gkCategoryList"></div>
+          <button onclick="addGkCategory()">+ Add Category</button>
+          <button class="secondary" onclick="syncGkFromFirestore()">Sync</button>
         </div>
-      </section>
-
-      <section id="gk" class="module hidden">
-        <div class="grid">
-          <div class="card span4">
-            <h3>Categories</h3>
-            <div id="gkCategoryList"></div>
-            <button onclick="addGkCategory()">+ Add Category</button>
-            <button class="secondary" onclick="syncGkFromFirestore()">Sync from Firestore</button>
-          </div>
-
-          <div class="card span8">
-            <h3>GK Category Editor</h3>
-            <div class="field"><label>Category ID</label><input id="gkId" placeholder="our_world" /></div>
-            <div class="field"><label>Title</label><input id="gkTitle" placeholder="Our World" /></div>
-            <div class="field"><label>Intro</label><textarea id="gkIntro" placeholder="Learn exciting facts for curious minds."></textarea></div>
-
-            <h3>Facts</h3>
-            <div id="gkFacts"></div>
-            <div class="row">
-              <button onclick="addFact()">+ Add Fact</button>
-              <button class="success" onclick="saveCurrentGkCategory()">Save Category</button>
-              <button class="danger" onclick="deleteCurrentGkCategory()">Delete Category</button>
-            </div>
-          </div>
+        <div class="card span8">
+          <h3>GK Editor</h3>
+          <div class="field"><label>ID</label><input id="gkId" /></div>
+          <div class="field"><label>Title</label><input id="gkTitle" /></div>
+          <div class="field"><label>Intro</label><textarea id="gkIntro"></textarea></div>
+          <h3>Facts</h3>
+          <div id="gkFacts"></div>
+          <div class="row"><button onclick="addFact()">+ Fact</button><button class="ok" onclick="saveCurrentGkCategory()">Save</button><button class="danger" onclick="deleteCurrentGkCategory()">Delete</button></div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section id="daily" class="module hidden">
-        <div class="grid">
-          <div class="card span6">
-            <h3>Daily Newspaper Editor</h3>
-            <div class="field"><label>Issue Date</label><input type="date" id="dailyDate" /></div>
-            <div class="field"><label>Status</label><select id="dailyStatus"><option value="draft">Draft</option><option value="published">Published</option></select></div>
-            <div class="field"><label>Top Story</label><textarea id="dailyTop"></textarea></div>
-            <div class="field"><label>GK Booster</label><textarea id="dailyGk"></textarea></div>
-            <button class="success" onclick="saveDailyIssue()">Save Daily Issue</button>
+    <!-- Daily -->
+    <section id="daily" class="module hidden">
+      <div class="grid">
+        <div class="card span7">
+          <h3>Daily Newspaper Editor (Full Fields)</h3>
+          <div class="field"><label>Issue Date</label><input type="date" id="dailyIssueDate" /></div>
+          <div class="field"><label>Status</label><select id="dailyIssueStatus"><option value="draft">Draft</option><option value="published">Published</option></select></div>
+          <div class="field"><label>Editor Note</label><textarea id="dailyEditorNote"></textarea></div>
+
+          <div class="row">
+            <div class="field" style="flex:1;min-width:230px;"><label>Cover Image</label><input type="file" id="dailyCoverFile" accept="image/*" /></div>
+            <div class="field" style="flex:1;min-width:230px;"><label>PDF File</label><input type="file" id="dailyPdfFile" accept="application/pdf" /></div>
           </div>
 
-          <div class="card span6 tableWrap">
-            <h3>Recent Daily Issues</h3>
-            <table>
-              <thead><tr><th>ID</th><th>Status</th><th>Top Story</th></tr></thead>
-              <tbody id="dailyTable"></tbody>
-            </table>
-          </div>
+          <h3>Main Sections</h3>
+          <div id="dailySections"></div>
+
+          <h3>Quick Cards</h3>
+          <div class="field"><label>Joke of the Day</label><textarea id="dailyJoke"></textarea></div>
+          <div class="field"><label>Good Habit of the Day</label><textarea id="dailyHabit"></textarea></div>
+          <div class="field"><label>Moral Mini Story</label><textarea id="dailyMoral"></textarea></div>
+
+          <div class="row"><button class="ok" onclick="saveDailyIssue()">Save Daily Issue</button><button class="secondary" onclick="resetDailyForm()">Reset</button></div>
         </div>
-      </section>
 
-      <section id="monthly" class="module hidden">
-        <div class="grid">
-          <div class="card span6">
-            <h3>Monthly Magazine Editor</h3>
-            <div class="field"><label>Issue Month</label><input type="month" id="monthlyMonth" /></div>
-            <div class="field"><label>Status</label><select id="monthlyStatus"><option value="draft">Draft</option><option value="published">Published</option></select></div>
-            <div class="field"><label>Cover Hook</label><input id="monthlyHook" placeholder="Robots, Rainbows & Real Heroes" /></div>
-            <div class="field"><label>Feature Story</label><textarea id="monthlyFeature"></textarea></div>
-            <button class="success" onclick="saveMonthlyIssue()">Save Monthly Issue</button>
-          </div>
+        <div class="card span5"><h3>Live Newspaper Preview</h3><div id="dailyPreview" class="previewPaper"></div></div>
 
-          <div class="card span6 tableWrap">
-            <h3>Recent Monthly Issues</h3>
-            <table>
-              <thead><tr><th>ID</th><th>Status</th><th>Hook</th></tr></thead>
-              <tbody id="monthlyTable"></tbody>
-            </table>
-          </div>
+        <div class="card tableWrap">
+          <h3>Saved Daily Issues</h3>
+          <table>
+            <thead><tr><th>ID</th><th>Date</th><th>Status</th><th>Top Story</th><th>Actions</th></tr></thead>
+            <tbody id="dailyTable"></tbody>
+          </table>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section id="analytics" class="module hidden">
-        <div class="grid">
-          <div class="card span4 kpi"><span>Total Stories</span><b id="kpiStories">0</b><span class="hint">stories collection</span></div>
-          <div class="card span4 kpi"><span>Total Views</span><b id="kpiViews">0</b><span class="hint">sum of all story views</span></div>
-          <div class="card span4 kpi"><span>GK Categories</span><b id="kpiGk">0</b><span class="hint">staticgk collection</span></div>
+    <!-- Monthly -->
+    <section id="monthly" class="module hidden">
+      <div class="grid">
+        <div class="card span7">
+          <h3>Monthly Magazine Editor (22 Pages Full)</h3>
+          <div class="field"><label>Issue Month</label><input type="month" id="monthlyIssueMonth" /></div>
+          <div class="field"><label>Status</label><select id="monthlyIssueStatus"><option value="draft">Draft</option><option value="published">Published</option></select></div>
+          <div class="field"><label>Cover Hook Line</label><input id="monthlyCoverHook" /></div>
+          <div class="field"><label>Editor Note</label><textarea id="monthlyEditorNote"></textarea></div>
 
-          <div class="card span6">
-            <h3>Graphical: Views by Story</h3>
-            <canvas id="viewsChart"></canvas>
+          <div class="row">
+            <div class="field" style="flex:1;min-width:230px;"><label>Cover Image</label><input type="file" id="monthlyCoverFile" accept="image/*" /></div>
+            <div class="field" style="flex:1;min-width:230px;"><label>PDF File</label><input type="file" id="monthlyPdfFile" accept="application/pdf" /></div>
           </div>
 
-          <div class="card span6">
-            <h3>Graphical: Category Mix</h3>
-            <canvas id="categoryChart"></canvas>
-          </div>
+          <h3>Main Sections (22)</h3>
+          <div id="monthlySections"></div>
 
-          <div class="card">
-            <h3>Non-Graphical + Analytical Insights</h3>
-            <ul id="analyticsText"></ul>
-            <button onclick="refreshAnalytics()">Refresh Analytics</button>
-          </div>
+          <h3>Quick Cards</h3>
+          <div class="field"><label>Joke of the Day</label><textarea id="monthlyJoke"></textarea></div>
+          <div class="field"><label>Good Habit of the Day</label><textarea id="monthlyHabit"></textarea></div>
+          <div class="field"><label>Moral Mini Story</label><textarea id="monthlyMoral"></textarea></div>
+
+          <div class="row"><button class="ok" onclick="saveMonthlyIssue()">Save Monthly Issue</button><button class="secondary" onclick="resetMonthlyForm()">Reset</button></div>
         </div>
-      </section>
-    </main>
-  </div>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "PASTE_KEY",
-      authDomain: "talesandtruths-4733a.firebaseapp.com",
-      projectId: "talesandtruths-4733a",
-      storageBucket: "talesandtruths-4733a.firebasestorage.app"
-    };
+        <div class="card span5"><h3>Live Magazine Preview</h3><div id="monthlyPreview" class="previewPaper"></div></div>
 
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-
-    const heroContent = {
-      stories: ["Story Studio", "Create rich multimedia stories with blocks, scheduling, premium flags, and instant mobile preview."],
-      gk: ["Static GK Builder", "Build category-wise knowledge packs with facts, icons, text, and save directly to Firestore."],
-      daily: ["Daily Newspaper", "Publish quick daily editions with top story and GK booster updates."],
-      monthly: ["Monthly Magazine", "Manage monthly issue data and feature hooks in a clean workflow."],
-      analytics: ["Data and Analysis", "Get graphical, non-graphical, and analytical insights from your live content data."]
-    };
-
-    let editingStoryId = null;
-    let gkData = [{
-      id: "our_world",
-      title: "Our World",
-      intro: "Learn about Earth and amazing places around it.",
-      facts: [{ icon: "🌍", title: "Earth", text: "Earth is our home.", imageUrl: "" }]
-    }];
-    let gkIndex = 0;
-
-    let viewsChart = null;
-    let categoryChart = null;
-
-    // ---------- helpers ----------
-    function esc(v = "") {
-      return String(v)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;");
-    }
-
-    async function uploadFile(path, file) {
-      if (!file) return "";
-      const ref = storage.ref(path);
-      await ref.put(file);
-      return await ref.getDownloadURL();
-    }
-
-    // ---------- module switching ----------
-    document.querySelectorAll(".catBtn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const module = btn.dataset.module;
-        document.querySelectorAll(".catBtn").forEach(b => b.classList.toggle("active", b === btn));
-        document.querySelectorAll(".module").forEach(m => m.classList.add("hidden"));
-        document.getElementById(module).classList.remove("hidden");
-        heroTitle.textContent = heroContent[module][0];
-        heroSubtitle.textContent = heroContent[module][1];
-        if (module === "analytics") refreshAnalytics();
-      });
-    });
-
-    // ---------- story studio ----------
-    function storyToolbar() {
-      return `
-        <div class="row" style="margin-bottom:6px;">
-          <button type="button" class="secondary" onclick="document.execCommand('bold')"><b>B</b></button>
-          <button type="button" class="secondary" onclick="document.execCommand('italic')"><i>I</i></button>
-          <button type="button" class="secondary" onclick="document.execCommand('underline')"><u>U</u></button>
-          <button type="button" class="secondary" onclick="document.execCommand('insertUnorderedList')">• List</button>
+        <div class="card tableWrap">
+          <h3>Saved Monthly Issues</h3>
+          <table>
+            <thead><tr><th>ID</th><th>Month</th><th>Status</th><th>Feature Story</th><th>Actions</th></tr></thead>
+            <tbody id="monthlyTable"></tbody>
+          </table>
         </div>
-      `;
-    }
+      </div>
+    </section>
 
-    function addTextBlock(value = "") {
-      const block = document.createElement("div");
-      block.className = "storyBlock";
-      block.innerHTML = `
-        <button class="remove" onclick="this.parentElement.remove()">✕</button>
-        ${storyToolbar()}
-        <div class="editor" contenteditable="true">${value}</div>
-      `;
-      storyBlocks.appendChild(block);
-    }
+    <!-- Analytics -->
+    <section id="analytics" class="module hidden">
+      <div class="grid">
+        <div class="card span4 kpi">Total Stories <b id="kpiStories">0</b></div>
+        <div class="card span4 kpi">Total Views <b id="kpiViews">0</b></div>
+        <div class="card span4 kpi">GK Categories <b id="kpiGk">0</b></div>
+        <div class="card span6"><h3>Views Graph</h3><canvas id="viewsChart"></canvas></div>
+        <div class="card span6"><h3>Category Mix</h3><canvas id="categoryChart"></canvas></div>
+        <div class="card"><h3>Insights</h3><ul id="analyticsText"></ul><button onclick="refreshAnalytics()">Refresh</button></div>
+      </div>
+    </section>
+  </main>
+</div>
 
-    function addImageBlock(value = "") {
-      const block = document.createElement("div");
-      block.className = "storyBlock";
-      block.innerHTML = `
-        <button class="remove" onclick="this.parentElement.remove()">✕</button>
-        <input type="file" accept="image/*" />
-        <img src="${value}" style="max-width:220px; border-radius:8px; margin-top:8px; display:${value ? "block" : "none"};" />
-      `;
-      storyBlocks.appendChild(block);
-    }
+<script>
+const firebaseConfig = {
+  apiKey: "PASTE_KEY",
+  authDomain: "talesandtruths-4733a.firebaseapp.com",
+  projectId: "talesandtruths-4733a",
+  storageBucket: "talesandtruths-4733a.firebasestorage.app"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const storage = firebase.storage();
 
-    storyBlocks.addEventListener("change", (e) => {
-      if (e.target.type === "file") {
-        const img = e.target.parentElement.querySelector("img");
-        if (e.target.files[0]) {
-          img.src = URL.createObjectURL(e.target.files[0]);
-          img.style.display = "block";
-        }
-      }
-    });
+const heroData = {
+  stories: ["Story Studio", "Create rich multimedia stories with block editor and live preview."],
+  gk: ["Static GK Builder", "Create category/fact based knowledge content and save to Firestore."],
+  daily: ["Daily Newspaper", "All fields included with live newspaper preview and Firestore sync."],
+  monthly: ["Monthly Magazine", "All 22 page fields included with live magazine preview."],
+  analytics: ["Data and Analysis", "Graphical + non-graphical + analytical insights in one place."]
+};
 
-    async function saveStory() {
-      try {
-        const content = [];
+const dailySectionKeys = [
+  { key: "topStory", label: "Top Story" },
+  { key: "gkBooster", label: "GK Booster" },
+  { key: "wonderWorld", label: "Wonder World" },
+  { key: "puzzle", label: "Puzzle" }
+];
 
-        for (const block of storyBlocks.children) {
-          const editor = block.querySelector(".editor");
-          const fileInput = block.querySelector("input[type='file']");
-          const img = block.querySelector("img");
+const monthlySectionKeys = [
+  { key: "welcomeNote", page: 2, label: "From the Editor’s Desk" },
+  { key: "contents", page: 3, label: "What’s Inside This Month?" },
+  { key: "topStoryOfMonth", page: 4, label: "Big News for Young Minds" },
+  { key: "amazingFacts", page: 5, label: "Did You Know?" },
+  { key: "laughZone", page: 6, label: "Jokes & Giggles" },
+  { key: "moralStory", page: 7, label: "Story Time" },
+  { key: "animalWorld", page: 8, label: "Creature of the Month" },
+  { key: "scienceCorner", page: 9, label: "Mini Scientist Lab" },
+  { key: "brainGym", page: 10, label: "Puzzle Planet" },
+  { key: "creativeCorner", page: 11, label: "Kids Talent Gallery" },
+  { key: "heroOfMonth", page: 12, label: "Young Achiever Spotlight" },
+  { key: "goodHabitOfMonth", page: 13, label: "Grow Better Every Day" },
+  { key: "exploreWorld", page: 14, label: "Country Explorer" },
+  { key: "challengePage", page: 15, label: "Mission for You!" },
+  { key: "funActivity", page: 16, label: "Make & Do" },
+  { key: "wordPower", page: 17, label: "Word of the Month" },
+  { key: "comicStrip", page: 18, label: "Adventures of Mascot" },
+  { key: "quizTime", page: 19, label: "How Much Did You Learn?" },
+  { key: "winnersPage", page: 20, label: "Star Kids" },
+  { key: "lettersFromReaders", page: 21, label: "Your Voice Matters" },
+  { key: "nextMonthSneakPeek", page: 22, label: "Coming Soon" },
+  { key: "backCover", page: "Back", label: "Back Cover Activity" }
+];
 
-          if (editor) {
-            content.push({ type: "text", value: editor.innerHTML });
-          } else if (fileInput?.files?.[0]) {
-            const url = await uploadFile(`stories/blocks/${Date.now()}_${Math.random()}`, fileInput.files[0]);
-            content.push({ type: "image", value: url });
-          } else if (img?.src) {
-            content.push({ type: "image", value: img.src });
-          }
-        }
+let editingStoryId = null;
+let editingDailyId = null;
+let editingMonthlyId = null;
+let existingDailyCoverUrl = "", existingDailyPdfUrl = "";
+let existingMonthlyCoverUrl = "", existingMonthlyPdfUrl = "";
+let viewsChart, categoryChart;
 
-        const coverUrl = await uploadFile(`stories/covers/${Date.now()}`, storyCover.files[0]);
+let gkData = [{ id: "our_world", title: "Our World", intro: "Learn about Earth.", facts: [{ icon: "🌍", title: "Earth", text: "Our home planet", imageUrl: "" }] }];
+let gkIndex = 0;
 
-        const payload = {
-          title: storyTitle.value.trim() || "Untitled",
-          category: storyCategory.value.trim() || "general",
-          content,
-          coverImage: coverUrl,
-          views: 0,
-          featured: storyFeatured.checked,
-          isPremiumStory: storyPremium.checked,
-          status: storyPublishAt.value ? "draft" : "published",
-          publishAt: storyPublishAt.value ? new Date(storyPublishAt.value).getTime() : Date.now(),
-          updatedAt: Date.now(),
-          createdAt: Date.now()
-        };
+function esc(v="") { return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;"); }
+async function uploadFile(path, file) { if (!file) return ""; const ref = storage.ref(path); await ref.put(file); return await ref.getDownloadURL(); }
 
-        if (editingStoryId) {
-          await db.collection("stories").doc(editingStoryId).set(payload, { merge: true });
-          alert("Story updated ✔");
-          editingStoryId = null;
-        } else {
-          await db.collection("stories").add(payload);
-          alert("Story saved ✔");
-        }
+// module switch
+Array.from(document.querySelectorAll('.catBtn')).forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.catBtn').forEach(b=>b.classList.toggle('active', b===btn));
+    document.querySelectorAll('.module').forEach(m=>m.classList.add('hidden'));
+    const id=btn.dataset.module;
+    document.getElementById(id).classList.remove('hidden');
+    heroTitle.textContent=heroData[id][0]; heroSubtitle.textContent=heroData[id][1];
+    if(id==='analytics') refreshAnalytics();
+  };
+});
 
-        resetStoryEditor();
-        await loadStories();
-      } catch (e) {
-        alert("Story save failed: " + e.message);
-      }
-    }
+// story
+function toolbar() { return `<div class="row"><button type="button" class="secondary" onclick="document.execCommand('bold')"><b>B</b></button><button type="button" class="secondary" onclick="document.execCommand('italic')"><i>I</i></button><button type="button" class="secondary" onclick="document.execCommand('underline')"><u>U</u></button><button type="button" class="secondary" onclick="document.execCommand('insertUnorderedList')">• List</button></div>`; }
+function addTextBlock(v="") { const d=document.createElement('div'); d.className='storyBlock'; d.innerHTML=`<button class="removeBtn" onclick="this.parentElement.remove()">✕</button>${toolbar()}<div class="editor" contenteditable>${v}</div>`; storyBlocks.appendChild(d); }
+function addImageBlock(v="") { const d=document.createElement('div'); d.className='storyBlock'; d.innerHTML=`<button class="removeBtn" onclick="this.parentElement.remove()">✕</button><input type="file" accept="image/*"><img style="max-width:220px; margin-top:8px; border-radius:8px; display:${v?'block':'none'}" src="${v}">`; storyBlocks.appendChild(d); }
+storyBlocks.addEventListener('change',e=>{ if(e.target.type==='file'){ const img=e.target.parentElement.querySelector('img'); if(e.target.files[0]){ img.src=URL.createObjectURL(e.target.files[0]); img.style.display='block'; } } });
 
-    function resetStoryEditor() {
-      storyTitle.value = "";
-      storyCategory.value = "";
-      storyPublishAt.value = "";
-      storyFeatured.checked = false;
-      storyPremium.checked = false;
-      storyCover.value = "";
-      storyBlocks.innerHTML = "";
-      addTextBlock();
-    }
+async function saveStory(){
+  const content=[];
+  for(const b of storyBlocks.children){
+    const ed=b.querySelector('.editor'); const inp=b.querySelector('input[type=file]'); const img=b.querySelector('img');
+    if(ed) content.push({type:'text', value:ed.innerHTML});
+    else if(inp?.files?.[0]) content.push({type:'image', value:await uploadFile(`stories/blocks/${Date.now()}_${Math.random()}`, inp.files[0])});
+    else if(img?.src) content.push({type:'image', value:img.src});
+  }
+  const cover = await uploadFile(`stories/covers/${Date.now()}`, storyCover.files[0]);
+  const payload={
+    title: storyTitle.value.trim()||'Untitled', category: storyCategory.value.trim()||'general', content,
+    coverImage: cover, views:0, featured: storyFeatured.checked, isPremiumStory: storyPremium.checked,
+    status: storyPublishAt.value?'draft':'published', publishAt: storyPublishAt.value?new Date(storyPublishAt.value).getTime():Date.now(),
+    updatedAt: Date.now(), createdAt: Date.now()
+  };
+  if(editingStoryId){ await db.collection('stories').doc(editingStoryId).set(payload,{merge:true}); editingStoryId=null; alert('Story updated'); }
+  else { await db.collection('stories').add(payload); alert('Story saved'); }
+  resetStoryEditor(); loadStories();
+}
+function resetStoryEditor(){ storyTitle.value='';storyCategory.value='';storyPublishAt.value='';storyFeatured.checked=false;storyPremium.checked=false;storyCover.value='';storyBlocks.innerHTML='';addTextBlock(); }
+async function loadStories(){
+  let snap; try{ snap=await db.collection('stories').orderBy('updatedAt','desc').limit(100).get(); } catch { snap=await db.collection('stories').limit(100).get(); }
+  storiesTable.innerHTML='';
+  snap.forEach(doc=>{ const s=doc.data()||{}; storiesTable.innerHTML += `<tr><td>${esc(s.title||'')}</td><td>${esc(s.category||'')}</td><td>${s.views||0}</td><td>${s.featured?'⭐':''} ${s.isPremiumStory?'🔒':''}</td><td><button class="secondary" onclick="editStory('${doc.id}')">Edit</button> <button class="danger" onclick="deleteStory('${doc.id}')">Delete</button></td></tr>`; });
+}
+async function editStory(id){ const d=(await db.collection('stories').doc(id).get()).data()||{}; editingStoryId=id; storyTitle.value=d.title||''; storyCategory.value=d.category||''; storyFeatured.checked=!!d.featured; storyPremium.checked=!!d.isPremiumStory; storyBlocks.innerHTML=''; (d.content||[]).forEach(c=>c.type==='text'?addTextBlock(c.value||''):addImageBlock(c.value||'')); }
+async function deleteStory(id){ if(!confirm('Delete story?')) return; await db.collection('stories').doc(id).delete(); loadStories(); }
+setInterval(()=>{ let html=`<h4>${esc(storyTitle.value||'Untitled')}</h4>`; for(const b of storyBlocks.children){ const ed=b.querySelector('.editor'); const img=b.querySelector('img'); if(ed) html+=`<p>${ed.innerHTML}</p>`; if(img?.src) html+=`<img src="${img.src}">`; } storyPreview.innerHTML=html; },650);
 
-    async function loadStories() {
-      let snap;
-      try {
-        snap = await db.collection("stories").orderBy("updatedAt", "desc").limit(100).get();
-      } catch {
-        snap = await db.collection("stories").limit(100).get();
-      }
+// GK
+function renderGk(){
+  gkCategoryList.innerHTML='';
+  gkData.forEach((c,i)=>{ const d=document.createElement('div'); d.className='categoryItem'+(i===gkIndex?' active':''); d.textContent=`${c.title||'Untitled'} (${c.id||'-'})`; d.onclick=()=>{ gkIndex=i; renderGk(); }; gkCategoryList.appendChild(d); });
+  const c=gkData[gkIndex]; if(!c) return;
+  gkId.value=c.id||''; gkTitle.value=c.title||''; gkIntro.value=c.intro||'';
+  gkFacts.innerHTML='';
+  (c.facts||[]).forEach((f,i)=>{ const box=document.createElement('div'); box.className='factBox'; box.innerHTML=`<div class="field"><label>Icon</label><input value="${esc(f.icon||'')}" oninput="updateFact(${i},'icon',this.value)"></div><div class="field"><label>Title</label><input value="${esc(f.title||'')}" oninput="updateFact(${i},'title',this.value)"></div><div class="field"><label>Text</label><textarea oninput="updateFact(${i},'text',this.value)">${esc(f.text||'')}</textarea></div><div class="field"><label>Image URL</label><input value="${esc(f.imageUrl||'')}" oninput="updateFact(${i},'imageUrl',this.value)"></div><button class="danger" onclick="removeFact(${i})">Delete Fact</button>`; gkFacts.appendChild(box); });
+}
+function addGkCategory(){ gkData.push({id:'new_category',title:'New Category',intro:'',facts:[]}); gkIndex=gkData.length-1; renderGk(); }
+function addFact(){ gkData[gkIndex].facts.push({icon:'✨',title:'New Fact',text:'',imageUrl:''}); renderGk(); }
+function updateFact(i,k,v){ gkData[gkIndex].facts[i][k]=v; }
+function removeFact(i){ gkData[gkIndex].facts.splice(i,1); renderGk(); }
+async function saveCurrentGkCategory(){ const c=gkData[gkIndex]; c.id=gkId.value.trim(); c.title=gkTitle.value.trim(); c.intro=gkIntro.value.trim(); if(!c.id) return alert('ID required'); await db.collection('staticgk').doc(c.id).set({...c,updatedAt:Date.now()},{merge:true}); alert('Saved'); renderGk(); }
+async function deleteCurrentGkCategory(){ const c=gkData[gkIndex]; if(!c||!confirm(`Delete ${c.id}?`)) return; if(c.id) await db.collection('staticgk').doc(c.id).delete(); gkData.splice(gkIndex,1); if(!gkData.length) gkData=[{id:'new_category',title:'New Category',intro:'',facts:[]}]; gkIndex=0; renderGk(); }
+async function syncGkFromFirestore(){ const snap=await db.collection('staticgk').orderBy('title').get().catch(async()=>await db.collection('staticgk').get()); if(snap.empty) return alert('No data'); gkData=snap.docs.map(doc=>{const d=doc.data()||{}; return {id:d.id||doc.id,title:d.title||'',intro:d.intro||'',facts:Array.isArray(d.facts)?d.facts:[]};}); gkIndex=0; renderGk(); }
+[gkId,gkTitle,gkIntro].forEach(el=>el.addEventListener('input',()=>{ const c=gkData[gkIndex]; c.id=gkId.value; c.title=gkTitle.value; c.intro=gkIntro.value; renderGk(); }));
 
-      storiesTable.innerHTML = "";
-      snap.forEach((doc) => {
-        const s = doc.data() || {};
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${esc(s.title || "")}</td>
-          <td>${esc(s.category || "")}</td>
-          <td>${s.views || 0}</td>
-          <td>${s.featured ? "⭐" : ""} ${s.isPremiumStory ? "🔒" : ""}</td>
-          <td>
-            <button class="secondary" onclick="editStory('${doc.id}')">Edit</button>
-            <button class="danger" onclick="deleteStory('${doc.id}')">Delete</button>
-          </td>
-        `;
-        storiesTable.appendChild(tr);
-      });
-    }
+// Daily dynamic form + preview
+function buildDailySections(){
+  dailySections.innerHTML = dailySectionKeys.map(({key,label})=>`<div class="sectionBox"><h4>${label}</h4><div class="field"><label>${label} Title</label><input id="daily_${key}_title" placeholder="${label} title"></div><div class="field"><label>${label} Content</label><textarea id="daily_${key}_content"></textarea></div><div class="field"><label>${label} Image</label><input type="file" id="daily_${key}_file" accept="image/*"></div></div>`).join('');
+}
+function dailyIssueId(){ const v=dailyIssueDate.value; if(!v) return ''; const [y,m,d]=v.split('-'); return `${d}-${m}-${y}`; }
+async function saveDailyIssue(){
+  if(!dailyIssueDate.value) return alert('Please select issue date');
+  const id=dailyIssueId(); const bucket=`newspapers/${id}`;
+  let coverUrl=existingDailyCoverUrl; let pdfUrl=existingDailyPdfUrl;
+  if(dailyCoverFile.files[0]){ const ext=dailyCoverFile.files[0].name.split('.').pop()||'jpg'; coverUrl=await uploadFile(`${bucket}/cover.${ext}`, dailyCoverFile.files[0]); }
+  if(dailyPdfFile.files[0]){ pdfUrl=await uploadFile(`${bucket}/final.pdf`, dailyPdfFile.files[0]); }
 
-    async function editStory(id) {
-      const snap = await db.collection("stories").doc(id).get();
-      const data = snap.data() || {};
-      editingStoryId = id;
+  const sections={};
+  for(const {key,label} of dailySectionKeys){
+    let imageUrl = editingDailyId ? ((await db.collection('daily_newspapers').doc(id).get()).data()?.sections?.[key]?.imageUrl || '') : '';
+    const f=document.getElementById(`daily_${key}_file`).files[0];
+    if(f){ const ext=f.name.split('.').pop()||'jpg'; imageUrl=await uploadFile(`${bucket}/${key}.${ext}`, f); }
+    sections[key]={ title: document.getElementById(`daily_${key}_title`).value.trim()||label, content: document.getElementById(`daily_${key}_content`).value.trim(), imageUrl };
+  }
 
-      storyTitle.value = data.title || "";
-      storyCategory.value = data.category || "";
-      storyFeatured.checked = !!data.featured;
-      storyPremium.checked = !!data.isPremiumStory;
+  const payload={
+    id, issue_date_key:id, status: dailyIssueStatus.value, editor_note: dailyEditorNote.value.trim(),
+    date: firebase.firestore.Timestamp.fromDate(new Date(dailyIssueDate.value+'T00:00:00')),
+    image_url: coverUrl, pdf_url: pdfUrl, sections,
+    mini_cards:{ jokeOfTheDay: dailyJoke.value.trim(), goodHabitOfTheDay: dailyHabit.value.trim(), moralMiniStory: dailyMoral.value.trim() },
+    updatedAt: Date.now()
+  };
+  if(!editingDailyId) payload.createdAt=Date.now();
+  await db.collection('daily_newspapers').doc(id).set(payload,{merge:true});
+  editingDailyId=id; existingDailyCoverUrl=coverUrl; existingDailyPdfUrl=pdfUrl; alert('Daily issue saved');
+  loadDailyIssues(); renderDailyPreview();
+}
+function resetDailyForm(){
+  editingDailyId=null; existingDailyCoverUrl=''; existingDailyPdfUrl='';
+  dailyIssueDate.value=''; dailyIssueStatus.value='draft'; dailyEditorNote.value=''; dailyCoverFile.value=''; dailyPdfFile.value='';
+  dailySectionKeys.forEach(({key,label})=>{ document.getElementById(`daily_${key}_title`).value=label; document.getElementById(`daily_${key}_content`).value=''; document.getElementById(`daily_${key}_file`).value=''; });
+  dailyJoke.value=''; dailyHabit.value=''; dailyMoral.value=''; renderDailyPreview();
+}
+async function loadDailyIssues(){
+  let snap; try{ snap=await db.collection('daily_newspapers').orderBy('date','desc').limit(50).get(); } catch { snap=await db.collection('daily_newspapers').limit(50).get(); }
+  dailyTable.innerHTML='';
+  snap.forEach(doc=>{ const d=doc.data()||{}; const dateLabel=d.date?.toDate?.().toLocaleDateString()||doc.id; dailyTable.innerHTML += `<tr><td>${esc(doc.id)}</td><td>${esc(dateLabel)}</td><td>${esc(d.status||'draft')}</td><td>${esc(d.sections?.topStory?.title||'-')}</td><td><button class="secondary" onclick="editDailyIssue('${doc.id}')">Edit</button> <button class="danger" onclick="deleteDailyIssue('${doc.id}')">Delete</button></td></tr>`; });
+}
+async function editDailyIssue(id){
+  const doc=await db.collection('daily_newspapers').doc(id).get(); const d=doc.data()||{}; editingDailyId=id;
+  const dt=d.date?.toDate?.(); if(dt){ const y=dt.getFullYear(); const m=String(dt.getMonth()+1).padStart(2,'0'); const day=String(dt.getDate()).padStart(2,'0'); dailyIssueDate.value=`${y}-${m}-${day}`; }
+  dailyIssueStatus.value=d.status||'draft'; dailyEditorNote.value=d.editor_note||''; existingDailyCoverUrl=d.image_url||''; existingDailyPdfUrl=d.pdf_url||'';
+  dailySectionKeys.forEach(({key,label})=>{ const s=d.sections?.[key]||{}; document.getElementById(`daily_${key}_title`).value=s.title||label; document.getElementById(`daily_${key}_content`).value=s.content||''; document.getElementById(`daily_${key}_file`).value=''; });
+  dailyJoke.value=d.mini_cards?.jokeOfTheDay||''; dailyHabit.value=d.mini_cards?.goodHabitOfTheDay||''; dailyMoral.value=d.mini_cards?.moralMiniStory||'';
+  renderDailyPreview(); window.scrollTo({top:0,behavior:'smooth'});
+}
+async function deleteDailyIssue(id){ if(!confirm(`Delete ${id}?`)) return; await db.collection('daily_newspapers').doc(id).delete(); if(editingDailyId===id) resetDailyForm(); loadDailyIssues(); }
+function renderDailyPreview(){
+  const dateVal=dailyIssueDate.value?new Date(dailyIssueDate.value+'T00:00:00'):new Date();
+  const label=dateVal.toLocaleDateString(undefined,{day:'2-digit',month:'long',year:'numeric'});
+  const coverFile=dailyCoverFile.files[0]; const coverSrc=coverFile?URL.createObjectURL(coverFile):existingDailyCoverUrl;
+  let html=`<h4>KIDS DAILY NEWSPAPER</h4><div><b>Issue Date:</b> ${esc(label)}</div>${coverSrc?`<img src="${esc(coverSrc)}" style="margin-top:8px;">`:''}${dailyEditorNote.value?`<p><b>Editor Note:</b> ${esc(dailyEditorNote.value)}</p>`:''}`;
+  for(const {key,label} of dailySectionKeys){
+    const t=document.getElementById(`daily_${key}_title`).value||label; const c=document.getElementById(`daily_${key}_content`).value||'(content pending)';
+    const f=document.getElementById(`daily_${key}_file`).files[0]; const img=f?URL.createObjectURL(f):'';
+    html += `<div class="npSection"><div class="npTitle">${esc(t)}</div>${img?`<img src="${esc(img)}">`:''}<p>${esc(c)}</p></div>`;
+  }
+  html += `<div class="npSection"><b>😂 Joke:</b><p>${esc(dailyJoke.value||'-')}</p><b>🌱 Good Habit:</b><p>${esc(dailyHabit.value||'-')}</p><b>📚 Moral Story:</b><p>${esc(dailyMoral.value||'-')}</p></div>`;
+  dailyPreview.innerHTML=html;
+}
 
-      storyBlocks.innerHTML = "";
-      (data.content || []).forEach(block => {
-        if (block.type === "text") addTextBlock(block.value || "");
-        else addImageBlock(block.value || "");
-      });
-    }
+// Monthly dynamic form + preview
+function buildMonthlySections(){
+  monthlySections.innerHTML = monthlySectionKeys.map(({key,label,page})=>`<div class="sectionBox"><h4>Page ${page} — ${label}</h4><div class="field"><label>${label} Title</label><input id="monthly_${key}_title" placeholder="${label} title"></div><div class="field"><label>${label} Content</label><textarea id="monthly_${key}_content"></textarea></div><div class="field"><label>${label} Image</label><input type="file" id="monthly_${key}_file" accept="image/*"></div></div>`).join('');
+}
+function monthlyIssueId(){ const v=monthlyIssueMonth.value; if(!v) return ''; const [y,m]=v.split('-'); return `${m}-${y}`; }
+async function saveMonthlyIssue(){
+  if(!monthlyIssueMonth.value) return alert('Please select issue month');
+  const id=monthlyIssueId(); const bucket=`magazines/${id}`;
+  let coverUrl=existingMonthlyCoverUrl, pdfUrl=existingMonthlyPdfUrl;
+  if(monthlyCoverFile.files[0]){ const ext=monthlyCoverFile.files[0].name.split('.').pop()||'jpg'; coverUrl=await uploadFile(`${bucket}/cover.${ext}`, monthlyCoverFile.files[0]); }
+  if(monthlyPdfFile.files[0]){ pdfUrl=await uploadFile(`${bucket}/final.pdf`, monthlyPdfFile.files[0]); }
 
-    async function deleteStory(id) {
-      if (!confirm("Delete story?")) return;
-      await db.collection("stories").doc(id).delete();
-      await loadStories();
-    }
+  const sections={};
+  for(const {key,label} of monthlySectionKeys){
+    let imageUrl = editingMonthlyId ? ((await db.collection('monthly_magazine').doc(id).get()).data()?.sections?.[key]?.imageUrl || '') : '';
+    const f=document.getElementById(`monthly_${key}_file`).files[0];
+    if(f){ const ext=f.name.split('.').pop()||'jpg'; imageUrl=await uploadFile(`${bucket}/${key}.${ext}`, f); }
+    sections[key]={ title: document.getElementById(`monthly_${key}_title`).value.trim()||label, content: document.getElementById(`monthly_${key}_content`).value.trim(), imageUrl };
+  }
 
-    setInterval(() => {
-      let html = `<h3>${esc(storyTitle.value || "Untitled")}</h3>`;
-      for (const block of storyBlocks.children) {
-        const editor = block.querySelector(".editor");
-        const img = block.querySelector("img");
-        if (editor) html += `<p>${editor.innerHTML}</p>`;
-        if (img?.src) html += `<img src="${img.src}" alt="preview" />`;
-      }
-      phonePreview.innerHTML = html;
-    }, 700);
+  const payload={
+    id, issue_date_key:id, month:id, status: monthlyIssueStatus.value, cover_hook: monthlyCoverHook.value.trim(), editor_note: monthlyEditorNote.value.trim(),
+    order: Number(monthlyIssueMonth.value.replace('-','')),
+    date: firebase.firestore.Timestamp.fromDate(new Date(monthlyIssueMonth.value+'-01T00:00:00')),
+    image_url: coverUrl, pdf_url: pdfUrl, sections,
+    mini_cards:{ jokeOfTheDay: monthlyJoke.value.trim(), goodHabitOfTheDay: monthlyHabit.value.trim(), moralMiniStory: monthlyMoral.value.trim() },
+    updatedAt: Date.now()
+  };
+  if(!editingMonthlyId) payload.createdAt=Date.now();
+  await db.collection('monthly_magazine').doc(id).set(payload,{merge:true});
+  editingMonthlyId=id; existingMonthlyCoverUrl=coverUrl; existingMonthlyPdfUrl=pdfUrl; alert('Monthly issue saved');
+  loadMonthlyIssues(); renderMonthlyPreview();
+}
+function resetMonthlyForm(){
+  editingMonthlyId=null; existingMonthlyCoverUrl=''; existingMonthlyPdfUrl='';
+  monthlyIssueMonth.value=''; monthlyIssueStatus.value='draft'; monthlyCoverHook.value=''; monthlyEditorNote.value=''; monthlyCoverFile.value=''; monthlyPdfFile.value='';
+  monthlySectionKeys.forEach(({key,label})=>{ document.getElementById(`monthly_${key}_title`).value=label; document.getElementById(`monthly_${key}_content`).value=''; document.getElementById(`monthly_${key}_file`).value=''; });
+  monthlyJoke.value=''; monthlyHabit.value=''; monthlyMoral.value=''; renderMonthlyPreview();
+}
+async function loadMonthlyIssues(){
+  let snap; try{ snap=await db.collection('monthly_magazine').orderBy('order','desc').limit(50).get(); } catch { snap=await db.collection('monthly_magazine').limit(50).get(); }
+  monthlyTable.innerHTML='';
+  snap.forEach(doc=>{ const d=doc.data()||{}; const monthLabel=d.month||doc.id; monthlyTable.innerHTML += `<tr><td>${esc(doc.id)}</td><td>${esc(monthLabel)}</td><td>${esc(d.status||'draft')}</td><td>${esc(d.sections?.topStoryOfMonth?.title||'-')}</td><td><button class="secondary" onclick="editMonthlyIssue('${doc.id}')">Edit</button> <button class="danger" onclick="deleteMonthlyIssue('${doc.id}')">Delete</button></td></tr>`; });
+}
+async function editMonthlyIssue(id){
+  const doc=await db.collection('monthly_magazine').doc(id).get(); const d=doc.data()||{}; editingMonthlyId=id;
+  if(d.month){ const [m,y]=String(d.month).split('-'); if(m&&y) monthlyIssueMonth.value=`${y}-${m}`; }
+  monthlyIssueStatus.value=d.status||'draft'; monthlyCoverHook.value=d.cover_hook||''; monthlyEditorNote.value=d.editor_note||''; existingMonthlyCoverUrl=d.image_url||''; existingMonthlyPdfUrl=d.pdf_url||'';
+  monthlySectionKeys.forEach(({key,label})=>{ const s=d.sections?.[key]||{}; document.getElementById(`monthly_${key}_title`).value=s.title||label; document.getElementById(`monthly_${key}_content`).value=s.content||''; document.getElementById(`monthly_${key}_file`).value=''; });
+  monthlyJoke.value=d.mini_cards?.jokeOfTheDay||''; monthlyHabit.value=d.mini_cards?.goodHabitOfTheDay||''; monthlyMoral.value=d.mini_cards?.moralMiniStory||'';
+  renderMonthlyPreview(); window.scrollTo({top:0,behavior:'smooth'});
+}
+async function deleteMonthlyIssue(id){ if(!confirm(`Delete ${id}?`)) return; await db.collection('monthly_magazine').doc(id).delete(); if(editingMonthlyId===id) resetMonthlyForm(); loadMonthlyIssues(); }
+function renderMonthlyPreview(){
+  const monthVal=monthlyIssueMonth.value?new Date(monthlyIssueMonth.value+'-01T00:00:00'):new Date();
+  const label=monthVal.toLocaleDateString(undefined,{month:'long',year:'numeric'});
+  const coverFile=monthlyCoverFile.files[0]; const coverSrc=coverFile?URL.createObjectURL(coverFile):existingMonthlyCoverUrl;
+  let html=`<h4>KIDS MONTHLY MAGAZINE</h4><div><b>Issue Month:</b> ${esc(label)}</div>${monthlyCoverHook.value?`<div><b>This Month:</b> ${esc(monthlyCoverHook.value)}</div>`:''}${coverSrc?`<img src="${esc(coverSrc)}" style="margin-top:8px;">`:''}${monthlyEditorNote.value?`<p><b>Editor Note:</b> ${esc(monthlyEditorNote.value)}</p>`:''}`;
+  for(const {key,label,page} of monthlySectionKeys){
+    const t=document.getElementById(`monthly_${key}_title`).value||label; const c=document.getElementById(`monthly_${key}_content`).value||'(content pending)';
+    const f=document.getElementById(`monthly_${key}_file`).files[0]; const img=f?URL.createObjectURL(f):'';
+    html += `<div class="npSection"><div class="npTitle">Page ${esc(page)} — ${esc(t)}</div>${img?`<img src="${esc(img)}">`:''}<p>${esc(c)}</p></div>`;
+  }
+  html += `<div class="npSection"><b>😂 Joke:</b><p>${esc(monthlyJoke.value||'-')}</p><b>🌱 Good Habit:</b><p>${esc(monthlyHabit.value||'-')}</p><b>📚 Moral Story:</b><p>${esc(monthlyMoral.value||'-')}</p></div>`;
+  monthlyPreview.innerHTML=html;
+}
 
-    // ---------- static GK ----------
-    function renderGk() {
-      gkCategoryList.innerHTML = "";
-      gkData.forEach((cat, i) => {
-        const item = document.createElement("div");
-        item.className = "categoryItem" + (i === gkIndex ? " active" : "");
-        item.textContent = `${cat.title || "Untitled"} (${cat.id || "-"})`;
-        item.onclick = () => { gkIndex = i; renderGk(); };
-        gkCategoryList.appendChild(item);
-      });
+// analytics
+async function refreshAnalytics(){
+  const storiesSnap=await db.collection('stories').get(); const gkSnap=await db.collection('staticgk').get();
+  let arr=[], views=0, cats={}; storiesSnap.forEach(doc=>{ const s=doc.data()||{}; arr.push(s); views+=s.views||0; const c=s.category||'general'; cats[c]=(cats[c]||0)+1; });
+  kpiStories.textContent=arr.length; kpiViews.textContent=views; kpiGk.textContent=gkSnap.size;
+  viewsChart?.destroy(); categoryChart?.destroy();
+  viewsChart=new Chart(document.getElementById('viewsChart'),{type:'bar',data:{labels:arr.map(s=>s.title||'Untitled').slice(0,12),datasets:[{label:'Views',data:arr.map(s=>s.views||0).slice(0,12),backgroundColor:'#6f8bff'}]}});
+  categoryChart=new Chart(document.getElementById('categoryChart'),{type:'doughnut',data:{labels:Object.keys(cats),datasets:[{data:Object.values(cats),backgroundColor:['#6f8bff','#32d1ff','#35d579','#ffc656','#f06287','#9a8eff']}]}});
+  const top=[...arr].sort((a,b)=>(b.views||0)-(a.views||0))[0];
+  const lines=[`Highest viewed story: ${top?.title||'N/A'} (${top?.views||0} views)`,`Average views/story: ${arr.length?(views/arr.length).toFixed(2):0}`,`Premium stories: ${arr.filter(s=>s.isPremiumStory).length}`,`Featured stories: ${arr.filter(s=>s.featured).length}`,`Most used category: ${Object.entries(cats).sort((a,b)=>b[1]-a[1])[0]?.[0]||'N/A'}`];
+  analyticsText.innerHTML=''; lines.forEach(t=>{ const li=document.createElement('li'); li.textContent=t; analyticsText.appendChild(li); });
+}
 
-      const cat = gkData[gkIndex];
-      if (!cat) return;
-      gkId.value = cat.id || "";
-      gkTitle.value = cat.title || "";
-      gkIntro.value = cat.intro || "";
+// live previews listeners
+document.body.addEventListener('input', (e)=>{ if(e.target.closest('#daily')) renderDailyPreview(); if(e.target.closest('#monthly')) renderMonthlyPreview(); });
+document.body.addEventListener('change', (e)=>{ if(e.target.closest('#daily') && e.target.matches('input[type=file]')) renderDailyPreview(); if(e.target.closest('#monthly') && e.target.matches('input[type=file]')) renderMonthlyPreview(); });
 
-      gkFacts.innerHTML = "";
-      (cat.facts || []).forEach((fact, index) => {
-        const div = document.createElement("div");
-        div.className = "factBox";
-        div.innerHTML = `
-          <div class="field"><label>Icon</label><input value="${esc(fact.icon || "")}" oninput="updateFact(${index}, 'icon', this.value)" /></div>
-          <div class="field"><label>Title</label><input value="${esc(fact.title || "")}" oninput="updateFact(${index}, 'title', this.value)" /></div>
-          <div class="field"><label>Text</label><textarea oninput="updateFact(${index}, 'text', this.value)">${esc(fact.text || "")}</textarea></div>
-          <div class="field"><label>Image URL (optional)</label><input value="${esc(fact.imageUrl || "")}" oninput="updateFact(${index}, 'imageUrl', this.value)" /></div>
-          <button class="danger" onclick="removeFact(${index})">Delete Fact</button>
-        `;
-        gkFacts.appendChild(div);
-      });
-    }
-
-    function addGkCategory() {
-      gkData.push({ id: "new_category", title: "New Category", intro: "", facts: [] });
-      gkIndex = gkData.length - 1;
-      renderGk();
-    }
-
-    function addFact() {
-      gkData[gkIndex].facts.push({ icon: "✨", title: "New Fact", text: "", imageUrl: "" });
-      renderGk();
-    }
-
-    function updateFact(index, key, value) {
-      gkData[gkIndex].facts[index][key] = value;
-    }
-
-    function removeFact(index) {
-      gkData[gkIndex].facts.splice(index, 1);
-      renderGk();
-    }
-
-    async function saveCurrentGkCategory() {
-      const cat = gkData[gkIndex];
-      cat.id = gkId.value.trim();
-      cat.title = gkTitle.value.trim();
-      cat.intro = gkIntro.value.trim();
-
-      if (!cat.id) return alert("Category ID required");
-
-      await db.collection("staticgk").doc(cat.id).set({
-        ...cat,
-        updatedAt: Date.now()
-      }, { merge: true });
-
-      alert("GK category saved ✔");
-      renderGk();
-    }
-
-    async function deleteCurrentGkCategory() {
-      const cat = gkData[gkIndex];
-      if (!cat || !confirm(`Delete ${cat.id}?`)) return;
-      if (cat.id) await db.collection("staticgk").doc(cat.id).delete();
-
-      gkData.splice(gkIndex, 1);
-      if (!gkData.length) gkData = [{ id: "new_category", title: "New Category", intro: "", facts: [] }];
-      gkIndex = 0;
-      renderGk();
-    }
-
-    async function syncGkFromFirestore() {
-      const snap = await db.collection("staticgk").orderBy("title").get().catch(async () => await db.collection("staticgk").get());
-      if (snap.empty) {
-        alert("No categories in staticgk yet.");
-        return;
-      }
-
-      gkData = snap.docs.map((doc) => {
-        const d = doc.data() || {};
-        return {
-          id: d.id || doc.id,
-          title: d.title || "",
-          intro: d.intro || "",
-          facts: Array.isArray(d.facts) ? d.facts : []
-        };
-      });
-
-      gkIndex = 0;
-      renderGk();
-    }
-
-    [gkId, gkTitle, gkIntro].forEach(el => {
-      el.addEventListener("input", () => {
-        const cat = gkData[gkIndex];
-        cat.id = gkId.value;
-        cat.title = gkTitle.value;
-        cat.intro = gkIntro.value;
-        renderGk();
-      });
-    });
-
-    // ---------- daily ----------
-    function toDailyId(dateInput) {
-      const [y, m, d] = dateInput.split("-");
-      return `${d}-${m}-${y}`;
-    }
-
-    async function saveDailyIssue() {
-      if (!dailyDate.value) return alert("Please select issue date");
-      const id = toDailyId(dailyDate.value);
-
-      await db.collection("daily_newspapers").doc(id).set({
-        id,
-        status: dailyStatus.value,
-        date: firebase.firestore.Timestamp.fromDate(new Date(dailyDate.value + "T00:00:00")),
-        sections: {
-          topStory: { title: "Top Story", content: dailyTop.value.trim() },
-          gkBooster: { title: "GK Booster", content: dailyGk.value.trim() }
-        },
-        updatedAt: Date.now()
-      }, { merge: true });
-
-      alert("Daily issue saved ✔");
-      await loadDailyIssues();
-    }
-
-    async function loadDailyIssues() {
-      let snap;
-      try {
-        snap = await db.collection("daily_newspapers").orderBy("date", "desc").limit(50).get();
-      } catch {
-        snap = await db.collection("daily_newspapers").limit(50).get();
-      }
-
-      dailyTable.innerHTML = "";
-      snap.forEach((doc) => {
-        const d = doc.data() || {};
-        dailyTable.innerHTML += `<tr><td>${esc(doc.id)}</td><td>${esc(d.status || "draft")}</td><td>${esc(d.sections?.topStory?.content || "-")}</td></tr>`;
-      });
-    }
-
-    // ---------- monthly ----------
-    function toMonthlyId(monthInput) {
-      const [y, m] = monthInput.split("-");
-      return `${m}-${y}`;
-    }
-
-    async function saveMonthlyIssue() {
-      if (!monthlyMonth.value) return alert("Please select issue month");
-      const id = toMonthlyId(monthlyMonth.value);
-
-      await db.collection("monthly_magazine").doc(id).set({
-        id,
-        month: id,
-        status: monthlyStatus.value,
-        cover_hook: monthlyHook.value.trim(),
-        order: Number(monthlyMonth.value.replace("-", "")),
-        sections: {
-          topStoryOfMonth: {
-            title: "Big News for Young Minds",
-            content: monthlyFeature.value.trim()
-          }
-        },
-        updatedAt: Date.now()
-      }, { merge: true });
-
-      alert("Monthly issue saved ✔");
-      await loadMonthlyIssues();
-    }
-
-    async function loadMonthlyIssues() {
-      let snap;
-      try {
-        snap = await db.collection("monthly_magazine").orderBy("order", "desc").limit(50).get();
-      } catch {
-        snap = await db.collection("monthly_magazine").limit(50).get();
-      }
-
-      monthlyTable.innerHTML = "";
-      snap.forEach((doc) => {
-        const d = doc.data() || {};
-        monthlyTable.innerHTML += `<tr><td>${esc(doc.id)}</td><td>${esc(d.status || "draft")}</td><td>${esc(d.cover_hook || "-")}</td></tr>`;
-      });
-    }
-
-    // ---------- analytics ----------
-    async function refreshAnalytics() {
-      const storiesSnap = await db.collection("stories").get();
-      const gkSnap = await db.collection("staticgk").get();
-
-      const stories = [];
-      let totalViews = 0;
-      const categories = {};
-
-      storiesSnap.forEach((doc) => {
-        const s = doc.data() || {};
-        stories.push(s);
-        totalViews += s.views || 0;
-        const key = s.category || "general";
-        categories[key] = (categories[key] || 0) + 1;
-      });
-
-      kpiStories.textContent = stories.length;
-      kpiViews.textContent = totalViews;
-      kpiGk.textContent = gkSnap.size;
-
-      viewsChart?.destroy();
-      categoryChart?.destroy();
-
-      viewsChart = new Chart(document.getElementById("viewsChart"), {
-        type: "bar",
-        data: {
-          labels: stories.map(s => s.title || "Untitled").slice(0, 12),
-          datasets: [{
-            label: "Views",
-            data: stories.map(s => s.views || 0).slice(0, 12),
-            backgroundColor: "#6c8bff"
-          }]
-        }
-      });
-
-      categoryChart = new Chart(document.getElementById("categoryChart"), {
-        type: "doughnut",
-        data: {
-          labels: Object.keys(categories),
-          datasets: [{
-            data: Object.values(categories),
-            backgroundColor: ["#6c8bff", "#2fd2ff", "#4ddb7a", "#ffc656", "#ff6f8e", "#9f8fff"]
-          }]
-        }
-      });
-
-      const topStory = [...stories].sort((a, b) => (b.views || 0) - (a.views || 0))[0];
-      const avgViews = stories.length ? (totalViews / stories.length).toFixed(2) : "0";
-      const premiumCount = stories.filter(s => s.isPremiumStory).length;
-      const featuredCount = stories.filter(s => s.featured).length;
-      const topCategory = Object.entries(categories).sort((a, b) => b[1] - a[1])[0]?.[0] || "N/A";
-
-      analyticsText.innerHTML = "";
-      [
-        `Highest viewed story: ${topStory?.title || "N/A"} (${topStory?.views || 0} views)`,
-        `Average views per story: ${avgViews}`,
-        `Premium stories count: ${premiumCount}`,
-        `Featured stories count: ${featuredCount}`,
-        `Most used category: ${topCategory}`
-      ].forEach(line => {
-        const li = document.createElement("li");
-        li.textContent = line;
-        analyticsText.appendChild(li);
-      });
-    }
-
-    // ---------- init ----------
-    (async function init() {
-      resetStoryEditor();
-      renderGk();
-      await Promise.all([loadStories(), loadDailyIssues(), loadMonthlyIssues()]);
-    })();
-  </script>
+(async function init(){
+  addTextBlock();
+  buildDailySections();
+  buildMonthlySections();
+  resetDailyForm();
+  resetMonthlyForm();
+  renderGk();
+  await Promise.all([loadStories(), loadDailyIssues(), loadMonthlyIssues()]);
+})();
+</script>
 </body>
 </html>
