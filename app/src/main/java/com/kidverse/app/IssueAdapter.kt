@@ -6,8 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kidverse.app.R
 import com.kidverse.app.loadFast
 import com.kidverse.app.PdfDownloadUtil
-import com.kidverse.app.databinding.ItemIssueBinding
 import com.kidverse.app.model.IssueModel
+
+import com.kidverse.app.databinding.ItemIssueBinding
 
 class IssueAdapter(
     private val list: List<IssueModel>,
@@ -42,10 +43,21 @@ class IssueAdapter(
             onRead(item)
         }
 
+        if (item.pdfUrl.isNullOrBlank()) {
+            holder.binding.btnDownload.isEnabled = false
+            holder.binding.btnDownload.alpha = 0.5f
+        } else {
+            holder.binding.btnDownload.isEnabled = true
+            holder.binding.btnDownload.alpha = 1f
+        }
+
         holder.binding.btnDownload.setOnClickListener {
+            val pdfUrl = item.pdfUrl
+            if (pdfUrl.isNullOrBlank()) return@setOnClickListener
+
             PdfDownloadUtil.download(
                 context = holder.itemView.context,
-                pdfUrl = item.pdfUrl,
+                pdfUrl = pdfUrl,
                 fileName = "Kids_${item.title}.pdf"
             )
         }

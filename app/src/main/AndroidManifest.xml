@@ -47,6 +47,7 @@
         <activity android:name="com.kidverse.app.StaticGKActivity" />
         <activity android:name="com.kidverse.app.CurrentGKActivity" />
         <activity android:name="com.kidverse.app.DailyNewspaperActivity" />
+        <activity android:name="com.kidverse.app.MonthlyMagazineActivity" />
         <activity android:name="com.kidverse.app.GKSubCategoryActivity" />
         <activity android:name="com.kidverse.app.AlphabetSelectionActivity" />
         <activity android:name="com.kidverse.app.AlphabetTraceActivity" />

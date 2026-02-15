@@ -42,6 +42,7 @@ class CurrentGKActivity : AppCompatActivity() {
 
     private var monthlyPdfUrl: String? = null
     private var monthlyLabel: String? = null
+    private var monthlyIssueId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,6 +135,7 @@ class CurrentGKActivity : AppCompatActivity() {
                 }
 
                 val doc = snapshot.documents[0]
+                monthlyIssueId = doc.id
                 val imageUrl = doc.getString("image_url")
                 monthlyPdfUrl = doc.getString("pdf_url")
                 monthlyLabel = doc.getString("month") ?: "Monthly Magazine"
@@ -178,17 +180,16 @@ class CurrentGKActivity : AppCompatActivity() {
         }
 
         binding.btnReadMagazine.setOnClickListener {
-            if (monthlyPdfUrl.isNullOrEmpty()) {
-                Toast.makeText(this, "Magazine not available", Toast.LENGTH_SHORT).show()
+            if (monthlyIssueId.isNullOrEmpty()) {
+                Toast.makeText(this, "Magazine loading...", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             GKTracker.recordGkRead(this, "current_monthly_${monthlyLabel ?: "latest"}")
             GKTracker.recordGkRead("current_monthly_${monthlyLabel ?: "latest"}")
 
-            val intent = Intent(this, PdfReaderActivity::class.java)
-            intent.putExtra("pdf_url", monthlyPdfUrl)
-            intent.putExtra("label", monthlyLabel)
+            val intent = Intent(this, MonthlyMagazineActivity::class.java)
+            intent.putExtra("issue_id", monthlyIssueId)
             startActivity(intent)
         }
 
@@ -405,6 +406,10 @@ data class DailyIssue(
 ) {
     fun sectionsInOrder(): List<DailySection> {
         val order = listOf("topStory", "gkBooster", "wonderWorld", "puzzle")
+        return sectionsInOrder(order)
+    }
+
+    fun sectionsInOrder(order: List<String>): List<DailySection> {
         return order.map { key ->
             sections[key] ?: DailySection(defaultTitle(key), "")
         }
@@ -416,25 +421,47 @@ data class DailyIssue(
             "gkBooster" -> "GK Booster"
             "wonderWorld" -> "Wonder World"
             "puzzle" -> "Puzzle"
+            "welcomeNote" -> "From the Editor's Desk"
+            "contents" -> "What’s Inside This Month?"
+            "topStoryOfMonth" -> "Big News for Young Minds"
+            "amazingFacts" -> "Did You Know?"
+            "laughZone" -> "Jokes & Giggles"
+            "moralStory" -> "Story Time"
+            "animalWorld" -> "Creature of the Month"
+            "scienceCorner" -> "Mini Scientist Lab"
+            "brainGym" -> "Puzzle Planet"
+            "creativeCorner" -> "Kids Talent Gallery"
+            "heroOfMonth" -> "Young Achiever Spotlight"
+            "goodHabitOfMonth" -> "Grow Better Every Day"
+            "exploreWorld" -> "Country Explorer"
+            "challengePage" -> "Mission for You!"
+            "funActivity" -> "Make & Do"
+            "wordPower" -> "Word of the Month"
+            "comicStrip" -> "Adventures of [Mascot Name]"
+            "quizTime" -> "How Much Did You Learn?"
+            "winnersPage" -> "Star Kids"
+            "lettersFromReaders" -> "Your Voice Matters"
+            "nextMonthSneakPeek" -> "Coming Soon…"
+            "backCover" -> "Back Cover Activity"
             else -> key
         }
     }
 
     companion object {
         @Suppress("UNCHECKED_CAST")
-        fun fromFirestore(data: Map<String, Any>): DailyIssue {
+        fun fromFirestore(data: Map<String, Any>, fallbackDisplay: String = "Daily Newspaper"): DailyIssue {
             val ts = data["date"] as? Timestamp
             val date = ts?.toDate()
             val display = if (date != null) {
                 SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(date)
             } else {
-                "Daily Newspaper"
+                data["month"]?.toString().orEmpty().ifBlank { fallbackDisplay }
             }
 
             val safeDate = if (date != null) {
                 DateFormat.format("dd-MM-yyyy", date).toString()
             } else {
-                SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(java.util.Date())
+                display.replace("[^A-Za-z0-9_-]".toRegex(), "_")
             }
 
             val rawSections = data["sections"] as? Map<String, Any?> ?: emptyMap()

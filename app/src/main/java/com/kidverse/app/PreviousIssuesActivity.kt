@@ -10,8 +10,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.kidverse.app.adapter.IssueAdapter
 import com.kidverse.app.databinding.ActivityPreviousIssuesBinding
-import com.kidverse.app.model.IssueModel
 import java.text.SimpleDateFormat
+import com.kidverse.app.model.IssueModel
 import java.util.*
 
 class PreviousIssuesActivity : AppCompatActivity() {
@@ -57,10 +57,12 @@ class PreviousIssuesActivity : AppCompatActivity() {
                     val pdf = doc.getString("pdf_url")
                     val img = doc.getString("image_url")
 
-                    if (ts != null && pdf != null) {
+                    if (ts != null) {
                         IssueModel(
+                            issueId = doc.id,
                             title = sdf.format(ts.toDate()),
                             pdfUrl = pdf,
+                            type = "DAILY",
                             imageUrl = img
                         )
                     } else null
@@ -68,7 +70,7 @@ class PreviousIssuesActivity : AppCompatActivity() {
 
                 binding.recyclerView.adapter =
                     IssueAdapter(list) { issue ->
-                        openPdf(issue.pdfUrl, issue.title)
+                        openIssue(issue)
                     }
             }
             .addOnFailureListener { e ->
@@ -95,10 +97,12 @@ class PreviousIssuesActivity : AppCompatActivity() {
                     val pdf = doc.getString("pdf_url")
                     val img = doc.getString("image_url")
 
-                    if (month != null && pdf != null) {
+                    if (month != null) {
                         IssueModel(
+                            issueId = doc.id,
                             title = month,
                             pdfUrl = pdf,
+                            type = "MONTHLY",
                             imageUrl = img
                         )
                     } else null
@@ -106,7 +110,7 @@ class PreviousIssuesActivity : AppCompatActivity() {
 
                 binding.recyclerView.adapter =
                     IssueAdapter(list) { issue ->
-                        openPdf(issue.pdfUrl, issue.title)
+                        openIssue(issue)
                     }
             }
             .addOnFailureListener { e ->
@@ -115,10 +119,30 @@ class PreviousIssuesActivity : AppCompatActivity() {
             }
     }
 
-    private fun openPdf(pdfUrl: String, label: String) {
-        val intent = Intent(this, PdfReaderActivity::class.java)
-        intent.putExtra("pdf_url", pdfUrl)
-        intent.putExtra("label", label)
-        startActivity(intent)
+    private fun openIssue(issue: IssueModel) {
+        if (issue.type == "DAILY") {
+            startActivity(
+                Intent(this, DailyNewspaperActivity::class.java)
+                    .putExtra("issue_id", issue.issueId)
+            )
+            return
+        }
+
+        if (issue.type == "MONTHLY") {
+            startActivity(
+                Intent(this, MonthlyMagazineActivity::class.java)
+                    .putExtra("issue_id", issue.issueId)
+            )
+            return
+        }
+
+        val pdfUrl = issue.pdfUrl
+        if (!pdfUrl.isNullOrBlank()) {
+            startActivity(
+                Intent(this, PdfReaderActivity::class.java)
+                    .putExtra("pdf_url", pdfUrl)
+                    .putExtra("label", issue.title)
+            )
+        }
     }
 }
