@@ -31,7 +31,41 @@ object BadgeManager {
         BadgeDefinition("GK_GALAXY", "GK Galaxy", "Master of current + static GK", "🚀", 100, "gk")
     )
 
-    fun checkAndUnlockBadges(totalStoryWords: Int, totalGkStars: Int) {
+    fun refreshFromCloud(onComplete: (() -> Unit)? = null) {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            onComplete?.invoke()
+            return
+        }
+
+        val db = FirebaseFirestore.getInstance()
+        val userDoc = db.collection("users").document(user.uid)
+
+        userDoc.collection("readingHistory")
+            .get()
+            .addOnSuccessListener { historySnap ->
+                val totalStoryWords = historySnap.documents.sumOf {
+                    (it.getLong("wordsRead") ?: 0L).toInt()
+                }
+
+                userDoc.collection("gkHistory")
+                    .get()
+                    .addOnSuccessListener { gkSnap ->
+                        val totalGkStars = (gkSnap.size() * 5).coerceAtMost(100)
+                        checkAndUnlockBadges(totalStoryWords, totalGkStars)
+                        onComplete?.invoke()
+                    }
+                    .addOnFailureListener {
+                        checkAndUnlockBadges(totalStoryWords, 0)
+                        onComplete?.invoke()
+                    }
+            }
+            .addOnFailureListener {
+                onComplete?.invoke()
+            }
+    }
+
+    private fun checkAndUnlockBadges(totalStoryWords: Int, totalGkStars: Int) {
         val user = FirebaseAuth.getInstance().currentUser ?: return
         val db = FirebaseFirestore.getInstance()
         val userDoc = db.collection("users").document(user.uid)

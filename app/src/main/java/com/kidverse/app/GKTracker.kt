@@ -7,25 +7,28 @@ import com.google.firebase.firestore.SetOptions
 
 object GKTracker {
 
-    private const val PREF_NAME = "kidverse_prefs"
-    private const val KEY_GK_READ_SET = "gkReadSet"
-
+    // Backward-compatible signature (old call sites passed context)
     fun recordGkRead(context: Context, contentId: String) {
-        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        val current = prefs.getStringSet(KEY_GK_READ_SET, emptySet())?.toMutableSet() ?: mutableSetOf()
-        if (current.add(contentId)) {
-            prefs.edit().putStringSet(KEY_GK_READ_SET, current).apply()
-            syncGkStars(current.size)
-        }
+        recordGkRead(contentId)
     }
 
-    private fun syncGkStars(uniqueReadCount: Int) {
+    fun recordGkRead(contentId: String) {
         val user = FirebaseAuth.getInstance().currentUser ?: return
-        val gkStars = (uniqueReadCount * 5).coerceAtMost(100)
-
-        FirebaseFirestore.getInstance()
+        val userDoc = FirebaseFirestore.getInstance()
             .collection("users")
             .document(user.uid)
-            .set(mapOf("gkStars" to gkStars), SetOptions.merge())
+
+        userDoc.collection("gkHistory")
+            .document(contentId)
+            .set(
+                mapOf(
+                    "contentId" to contentId,
+                    "readAt" to System.currentTimeMillis()
+                ),
+                SetOptions.merge()
+            )
+            .addOnSuccessListener {
+                BadgeManager.refreshFromCloud()
+            }
     }
 }

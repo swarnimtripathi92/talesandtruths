@@ -23,35 +23,19 @@ class BadgesActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser ?: return
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("users")
-            .document(user.uid)
-            .collection("readingHistory")
-            .get()
-            .addOnSuccessListener { historySnap ->
-                val totalStoryWords = historySnap.documents.sumOf {
-                    (it.getLong("wordsRead") ?: 0L).toInt()
-                }
-
-                db.collection("users")
-                    .document(user.uid)
-                    .get()
-                    .addOnSuccessListener { userDoc ->
-                        val gkStars = (userDoc.getLong("gkStars") ?: 0L).toInt()
-                        BadgeManager.checkAndUnlockBadges(totalStoryWords, gkStars)
-
-                        db.collection("users")
-                            .document(user.uid)
-                            .collection("badges")
-                            .get()
-                            .addOnSuccessListener { snap ->
-                                list.clear()
-                                for (doc in snap.documents) {
-                                    doc.toObject(Badge::class.java)?.let { list.add(it) }
-                                }
-                                list.sortWith(compareBy<Badge> { it.track }.thenBy { it.requiredStars })
-                                adapter.notifyDataSetChanged()
-                            }
+        BadgeManager.refreshFromCloud {
+            db.collection("users")
+                .document(user.uid)
+                .collection("badges")
+                .get()
+                .addOnSuccessListener { snap ->
+                    list.clear()
+                    for (doc in snap.documents) {
+                        doc.toObject(Badge::class.java)?.let { list.add(it) }
                     }
-            }
+                    list.sortWith(compareBy<Badge> { it.track }.thenBy { it.requiredStars })
+                    adapter.notifyDataSetChanged()
+                }
+        }
     }
 }

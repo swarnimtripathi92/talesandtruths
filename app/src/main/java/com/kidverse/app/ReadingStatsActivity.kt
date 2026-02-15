@@ -92,17 +92,7 @@ class ReadingStatsActivity : AppCompatActivity() {
                     stories = totalStorySet.size
                 )
 
-                FirebaseFirestore.getInstance()
-                    .collection("users")
-                    .document(user.uid)
-                    .get()
-                    .addOnSuccessListener { userDoc ->
-                        val gkStars = (userDoc.getLong("gkStars") ?: 0L).toInt()
-                        BadgeManager.checkAndUnlockBadges(
-                            totalStoryWords = totalWords,
-                            totalGkStars = gkStars
-                        )
-                    }
+                BadgeManager.refreshFromCloud()
             }
     }
 

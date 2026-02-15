@@ -82,6 +82,8 @@ class StaticGKActivity : AppCompatActivity() {
 
             GKTracker.recordGkRead(this, "static_${category.id}")
 
+            GKTracker.recordGkRead("static_${category.id}")
+
             when (category.id) {
 
                 "our_world" -> {

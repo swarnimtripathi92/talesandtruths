@@ -173,6 +173,8 @@ class CurrentGKActivity : AppCompatActivity() {
 
             GKTracker.recordGkRead(this, "current_daily_${todayLabel ?: "latest"}")
 
+            GKTracker.recordGkRead("current_daily_${todayLabel ?: "latest"}")
+
             val intent = Intent(this, PdfReaderActivity::class.java)
             intent.putExtra("pdf_url", todayPdfUrl)
             intent.putExtra("label", todayLabel)
@@ -211,6 +213,8 @@ class CurrentGKActivity : AppCompatActivity() {
             }
 
             GKTracker.recordGkRead(this, "current_monthly_${monthlyLabel ?: "latest"}")
+
+            GKTracker.recordGkRead("current_monthly_${monthlyLabel ?: "latest"}")
 
             val intent = Intent(this, PdfReaderActivity::class.java)
             intent.putExtra("pdf_url", monthlyPdfUrl)
