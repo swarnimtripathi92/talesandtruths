@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_badges_screen"
+    android:padding="18dp">
 
-    <!-- Heading -->
+    <TextView
+        android:id="@+id/tvBadgesHeadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🌟 Your Badge Garden"
+        android:textColor="#2A2A45"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🏆 Badges and Achievements"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="18dp"
+        android:text="Collect stars, unlock stories, and grow your super-reader powers!"
+        android:textColor="#5D5A7A"
+        android:textSize="14sp" />
 
-    <!-- Badges Grid -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerBadges"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never" />
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="18dp" />
 
 </LinearLayout>
