@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -207,7 +208,13 @@ class HomeActivity : AppCompatActivity() {
 
         val tvLast = findViewById<TextView>(R.id.tvLastStory)
         val tvTitle = findViewById<TextView>(R.id.tvContinueTitle)
-        val imageView = findViewById<ImageView>(R.id.ivContinueIcon)
+        val tvReadingStats = findViewById<TextView>(R.id.tvReadingStats)
+        val progressReading = findViewById<ProgressBar>(R.id.progressReading)
+
+        val weeklyReadCount = ReadingTracker.getLocalWeeklyReadCount(this)
+        val storyLabel = if (weeklyReadCount == 1) "story" else "stories"
+        tvReadingStats.text = "🔥 $weeklyReadCount $storyLabel this week"
+        progressReading.progress = (weeklyReadCount * 20).coerceAtMost(100)
 
         val lastStoryId = prefs.getString("lastReadStoryId", null)
 

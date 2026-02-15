@@ -49,6 +49,11 @@ class StoryReaderActivity : AppCompatActivity() {
 
 
     private lateinit var storyId: String
+    private var storyTitle: String = ""
+    private var storyCategory: String = ""
+    private var storyWordsRead: Int = 0
+    private var sessionStartMs: Long = 0L
+    private var sessionRecorded: Boolean = false
     private val prefs by lazy {
         getSharedPreferences("reader_settings", MODE_PRIVATE)
     }
@@ -78,7 +83,7 @@ class StoryReaderActivity : AppCompatActivity() {
         }
 
         storyId = receivedId
-        ReadingTracker.recordStoryRead(this, storyId)
+        sessionStartMs = System.currentTimeMillis()
 
         restoreReaderSettings()
         loadStory()
@@ -107,6 +112,8 @@ class StoryReaderActivity : AppCompatActivity() {
 
                 // ⭐ TITLE SET
                 val title = doc.getString("title") ?: "Story"
+                storyTitle = title
+                storyCategory = doc.getString("category") ?: "General"
                 tvTitle.text = title
 
                 // ⭐ CONTENT LOAD
@@ -123,6 +130,8 @@ class StoryReaderActivity : AppCompatActivity() {
                         it["value"].toString()
                     )
                 }
+
+                storyWordsRead = estimateWords(blocks)
 
                 adapter = StoryContentAdapter(blocks, textSize, fonts[fontIndex])
                 rv.adapter = adapter
@@ -357,8 +366,38 @@ class StoryReaderActivity : AppCompatActivity() {
     // --------------------------------------------------
 
     override fun onDestroy() {
-        tts.stop()
-        tts.shutdown()
+        persistReadingSessionIfNeeded()
+        if (::tts.isInitialized) {
+            tts.stop()
+            tts.shutdown()
+        }
         super.onDestroy()
     }
+
+    private fun persistReadingSessionIfNeeded() {
+        if (sessionRecorded || storyId.isBlank()) return
+
+        val durationSec = ((System.currentTimeMillis() - sessionStartMs) / 1000L).toInt().coerceAtLeast(1)
+        ReadingTracker.recordStorySession(
+            context = this,
+            storyId = storyId,
+            storyTitle = storyTitle.ifBlank { tvTitle.text?.toString() ?: "Story" },
+            category = storyCategory.ifBlank { "General" },
+            readDurationSec = durationSec,
+            wordsRead = storyWordsRead
+        )
+        sessionRecorded = true
+    }
+
+    private fun estimateWords(blocks: List<ContentBlock>): Int {
+        return blocks
+            .filter { it.type.equals("text", ignoreCase = true) }
+            .sumOf { block ->
+                block.value
+                    .trim()
+                    .split(Regex("\\s+"))
+                    .count { it.isNotBlank() }
+            }
+    }
+
 }
