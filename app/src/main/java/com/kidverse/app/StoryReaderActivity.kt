@@ -78,6 +78,7 @@ class StoryReaderActivity : AppCompatActivity() {
         }
 
         storyId = receivedId
+        ReadingTracker.recordStoryRead(this, storyId)
 
         restoreReaderSettings()
         loadStory()

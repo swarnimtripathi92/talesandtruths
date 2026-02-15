@@ -13,13 +13,15 @@
         android:padding="16dp">
 
         <!-- 🌈 HEADER IMAGE -->
-        <FrameLayout
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/headerContainer"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="228dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_header_round"
-            android:clipToOutline="true">
+            app:cardCornerRadius="30dp"
+            app:cardElevation="8dp"
+            app:strokeColor="#1AFFFFFF"
+            app:strokeWidth="1dp">
 
             <!-- Background Image -->
             <ImageView
@@ -35,6 +37,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/header_gradient_overlay"/>
+
+            <!-- Top Badge -->
+            <TextView
+                android:id="@+id/tvHeaderBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|start"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_header_chip"
+                android:paddingStart="12dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="6dp"
+                android:text="✨ New stories daily"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <!-- Branding Text -->
             <LinearLayout
@@ -62,9 +82,24 @@
                     android:textSize="14sp"
                     android:textColor="@android:color/white"
                     android:layout_marginTop="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvHeaderCta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_header_chip"
+                    android:paddingStart="14dp"
+                    android:paddingTop="7dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="7dp"
+                    android:text="Start reading →"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
-        </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
 
 
 

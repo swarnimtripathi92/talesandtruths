@@ -41,7 +41,10 @@ class HomeActivity : AppCompatActivity() {
             animateCard(cardKeepReading)
             handleKeepReading()
         }
-
+        findViewById<TextView>(R.id.tvHeaderCta)
+            .setOnClickListener {
+                startActivity(Intent(this, KidsStoriesActivity::class.java))
+            }
         findViewById<MaterialCardView>(R.id.cardMoral)
             .setOnClickListener {
                 startActivity(Intent(this, MoralStoriesActivity::class.java))

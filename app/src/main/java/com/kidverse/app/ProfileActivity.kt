@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -88,6 +90,7 @@ class ProfileActivity : AppCompatActivity() {
         val tvName = findViewById<TextView>(R.id.tvName)
         val tvEmail = findViewById<TextView>(R.id.tvEmail)
         val tvPremium = findViewById<TextView>(R.id.tvPremiumStatus)
+        val imgAvatar = findViewById<ImageView>(R.id.imgAvatar)
 
         val btnLogin = findViewById<Button>(R.id.btnLogin)
         val btnLogout = findViewById<Button>(R.id.btnLogout)
@@ -107,6 +110,12 @@ class ProfileActivity : AppCompatActivity() {
             tvName.text = "Welcome"
             tvEmail.text = "Sign in to personalize your experience"
             tvPremium.text = ""
+            tvPremium.visibility = View.GONE
+
+            Glide.with(this)
+                .load(R.mipmap.ic_launcher_round)
+                .circleCrop()
+                .into(imgAvatar)
 
             btnLogin.visibility = View.VISIBLE
             btnLogout.visibility = View.GONE
@@ -123,6 +132,14 @@ class ProfileActivity : AppCompatActivity() {
         } else {
             tvName.text = user.displayName ?: "User"
             tvEmail.text = user.email ?: ""
+            tvPremium.visibility = View.VISIBLE
+
+            Glide.with(this)
+                .load(user.photoUrl)
+                .placeholder(R.mipmap.ic_launcher_round)
+                .error(R.mipmap.ic_launcher_round)
+                .circleCrop()
+                .into(imgAvatar)
 
             btnLogin.visibility = View.GONE
             btnLogout.visibility = View.VISIBLE
