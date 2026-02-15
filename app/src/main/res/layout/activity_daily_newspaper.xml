@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Current GK for Kids"
+            android:text="Today's Newspaper"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -48,7 +48,6 @@
             android:padding="16dp">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardTodayNewspaper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
@@ -80,118 +79,120 @@
                         android:textSize="13sp" />
 
                     <ImageView
-                        android:id="@+id/imgTodayNewspaper"
+                        android:id="@+id/imgCover"
                         android:layout_width="match_parent"
-                        android:layout_height="220dp"
+                        android:layout_height="180dp"
                         android:layout_marginTop="12dp"
                         android:adjustViewBounds="true"
                         android:background="@drawable/rounded_image_bg"
                         android:scaleType="centerCrop"
                         android:src="@drawable/img_kids_newspaper_preview" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/txtEditorNote"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/btnReadToday"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:backgroundTint="#4CAF50"
-                            android:text="Read Today"
-                            android:textColor="#FFFFFF" />
-
-                        <Button
-                            android:id="@+id/btnDownloadTodayPdf"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="#FF9800"
-                            android:text="₹10 Download PDF"
-                            android:textColor="#FFFFFF" />
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/btnPreviousNewspapers"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:backgroundTint="#607D8B"
-                        android:text="See / Download Previous Issues"
-                        android:textColor="#FFFFFF" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardMonthlyMagazine"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="6dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:id="@+id/imgMonthlyMagazine"
-                        android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        android:adjustViewBounds="true"
-                        android:background="@drawable/rounded_image_bg"
-                        android:scaleType="centerCrop" />
+                        android:layout_marginTop="10dp"
+                        android:textColor="#3A3F52"
+                        android:textSize="14sp"
+                        android:textStyle="italic" />
 
                     <LinearLayout
+                        android:id="@+id/containerSections"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:cardCornerRadius="12dp"
+                        app:strokeColor="#D9DFEE"
+                        app:strokeWidth="1dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="vertical"
+                            android:padding="10dp">
 
-                            <Button
-                                android:id="@+id/btnReadMagazine"
-                                android:layout_width="0dp"
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:backgroundTint="#4CAF50"
-                                android:text="Read Magazine"
-                                android:textColor="#FFFFFF" />
+                                android:text="Joke of the Day"
+                                android:textStyle="bold" />
 
-                            <Button
-                                android:id="@+id/btnDownloadMagazinePdf"
-                                android:layout_width="0dp"
+                            <TextView
+                                android:id="@+id/txtJoke"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_weight="1"
-                                android:backgroundTint="#FF9800"
-                                android:text="₹50 Download PDF"
-                                android:textColor="#FFFFFF" />
+                                android:layout_marginTop="4dp"
+                                android:text="-" />
                         </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
 
-                        <Button
-                            android:id="@+id/btnPreviousMagazines"
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:cardCornerRadius="12dp"
+                        app:strokeColor="#D9DFEE"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:backgroundTint="#607D8B"
-                            android:text="See / Download Previous Issues"
-                            android:textColor="#FFFFFF" />
-                    </LinearLayout>
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Good Habit of the Day"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtHabit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="-" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:cardCornerRadius="12dp"
+                        app:strokeColor="#D9DFEE"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Moral Mini Story"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtMoral"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="-" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
         </LinearLayout>
     </ScrollView>
 

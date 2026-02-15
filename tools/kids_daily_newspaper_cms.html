@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kids Daily Newspaper CMS</title>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --accent: #4b6bfb;
+      --accent-dark: #2d46bd;
+      --muted: #6e7590;
+      --danger: #dd3b3b;
+      --border: #dde3f5;
+      --text: #1a2238;
+      --headline: "Georgia", serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 18px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(22, 33, 77, 0.06);
+    }
+
+    h1, h2, h3 { margin: 0 0 10px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 19px; color: var(--accent-dark); }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      padding: 10px;
+      font-family: inherit;
+    }
+
+    textarea { min-height: 78px; resize: vertical; }
+
+    button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-top: 4px;
+    }
+
+    button.secondary { background: #e9edff; color: #22315c; }
+    button.danger { background: var(--danger); }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .tableWrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+
+    /* newspaper preview */
+    #previewPaper {
+      background: #fffdf4;
+      border: 2px solid #212121;
+      border-radius: 12px;
+      min-height: 540px;
+      padding: 14px;
+      font-family: var(--headline);
+    }
+
+    #previewPaper .masthead {
+      text-align: center;
+      border-bottom: 4px double #111;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+
+    #previewPaper .masthead h2 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: 1px;
+      color: #101010;
+    }
+
+    #previewPaper .meta {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #3d3d3d;
+    }
+
+    #previewPaper img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid #d6d1b6;
+    }
+
+    .np-section {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #999;
+    }
+
+    .np-title {
+      font-size: 20px;
+      color: #101010;
+      margin-bottom: 6px;
+    }
+
+    .np-snippet { margin: 0; font-size: 15px; line-height: 1.5; }
+
+    .mini-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .mini-card {
+      border: 1px solid #ccb;
+      border-radius: 10px;
+      padding: 8px;
+      background: #fff;
+      min-height: 100px;
+    }
+
+    .status-pill {
+      display: inline-block;
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-weight: 700;
+      background: #e9edff;
+      color: #22315c;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Kids Daily Newspaper CMS</h1>
+
+  <div class="layout">
+    <div>
+      <div class="card">
+        <h2>Issue Details</h2>
+        <div class="grid-2">
+          <div class="field">
+            <label>Issue Date</label>
+            <input type="date" id="issueDate" />
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="issueStatus">
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Editor Note (optional)</label>
+          <textarea id="editorNote" placeholder="Today we learned about teamwork and oceans..."></textarea>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Cover Image</label>
+            <input type="file" id="coverFile" accept="image/*" />
+            <div class="hint">Saved at: <code>newspapers/YYYY-MM-DD/cover.jpg</code></div>
+          </div>
+          <div class="field">
+            <label>PDF (optional)</label>
+            <input type="file" id="pdfFile" accept="application/pdf" />
+            <div class="hint">Saved at: <code>newspapers/YYYY-MM-DD/final.pdf</code></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Main Sections</h2>
+        <div id="sectionForm"></div>
+      </div>
+
+      <div class="card">
+        <h2>Quick Cards</h2>
+        <div class="grid-2">
+          <div class="field">
+            <label>Joke of the Day</label>
+            <textarea id="jokeText" placeholder="Why did the...?"></textarea>
+          </div>
+          <div class="field">
+            <label>Good Habit of the Day</label>
+            <textarea id="habitText" placeholder="Drink water after waking up..."></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label>Moral Mini Story</label>
+          <textarea id="moralStoryText" placeholder="A short story with moral in 4-6 lines..."></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <button onclick="saveIssue()">Save Issue</button>
+        <button class="secondary" onclick="resetForm()">Reset Form</button>
+        <span id="saveState" class="hint"></span>
+      </div>
+
+      <div class="card tableWrap">
+        <h2>Saved Issues</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Top Story</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="issuesTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h2>Live Newspaper Preview</h2>
+        <div id="previewPaper"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // 1) Paste your Firebase config here.
+  const firebaseConfig = {
+    apiKey: "PASTE_KEY",
+    authDomain: "talesandtruths-4733a.firebaseapp.com",
+    projectId: "talesandtruths-4733a",
+    storageBucket: "talesandtruths-4733a.firebasestorage.app"
+  };
+
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const storage = firebase.storage();
+
+  const sectionKeys = [
+    { key: "topStory", label: "Top Story" },
+    { key: "gkBooster", label: "GK Booster" },
+    { key: "wonderWorld", label: "Wonder World" },
+    { key: "puzzle", label: "Puzzle" }
+  ];
+
+  const sectionForm = document.getElementById("sectionForm");
+  const issuesTable = document.getElementById("issuesTable");
+  const saveState = document.getElementById("saveState");
+
+  let editingId = null;
+  let existingCoverUrl = "";
+  let existingPdfUrl = "";
+
+  function esc(v = "") {
+    return String(v)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;");
+  }
+
+  function buildSectionForm() {
+    sectionForm.innerHTML = sectionKeys.map(({ key, label }) => `
+      <div class="card" style="margin:0 0 10px; border-style:dashed;">
+        <h3>${label}</h3>
+        <div class="field">
+          <label>${label} Title</label>
+          <input id="${key}_title" placeholder="${label} title" />
+        </div>
+        <div class="field">
+          <label>${label} Content</label>
+          <textarea id="${key}_content" placeholder="Write short newspaper content..."></textarea>
+        </div>
+        <div class="field">
+          <label>${label} Image (optional)</label>
+          <input type="file" id="${key}_file" accept="image/*" />
+          <div class="hint">Saved at: <code>newspapers/YYYY-MM-DD/${key}.jpg</code></div>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  buildSectionForm();
+
+  function getIssueId() {
+    const d = document.getElementById("issueDate").value;
+    if (!d) return "";
+    const [y, m, day] = d.split("-");
+    return `${day}-${m}-${y}`;
+  }
+
+  async function uploadFile(path, file) {
+    const ref = storage.ref(path);
+    await ref.put(file);
+    return await ref.getDownloadURL();
+  }
+
+  async function saveIssue() {
+    try {
+      const issueDate = document.getElementById("issueDate").value;
+      if (!issueDate) return alert("Please select issue date");
+
+      const issueId = getIssueId();
+      const status = document.getElementById("issueStatus").value;
+      const editorNote = document.getElementById("editorNote").value.trim();
+      const bucketBase = `newspapers/${issueId}`;
+
+      saveState.textContent = "Saving...";
+
+      let coverUrl = existingCoverUrl;
+      const coverFile = document.getElementById("coverFile").files[0];
+      if (coverFile) {
+        const ext = coverFile.name.split(".").pop() || "jpg";
+        coverUrl = await uploadFile(`${bucketBase}/cover.${ext}`, coverFile);
+      }
+
+      let pdfUrl = existingPdfUrl;
+      const pdfFile = document.getElementById("pdfFile").files[0];
+      if (pdfFile) {
+        pdfUrl = await uploadFile(`${bucketBase}/final.pdf`, pdfFile);
+      }
+
+      const sections = {};
+      for (const { key, label } of sectionKeys) {
+        const title = document.getElementById(`${key}_title`).value.trim() || label;
+        const content = document.getElementById(`${key}_content`).value.trim();
+
+        let imageUrl = editingId ? (await db.collection("daily_newspapers").doc(issueId).get()).data()?.sections?.[key]?.imageUrl || "" : "";
+        const f = document.getElementById(`${key}_file`).files[0];
+        if (f) {
+          const ext = f.name.split(".").pop() || "jpg";
+          imageUrl = await uploadFile(`${bucketBase}/${key}.${ext}`, f);
+        }
+
+        sections[key] = { title, content, imageUrl };
+      }
+
+      const miniCards = {
+        jokeOfTheDay: document.getElementById("jokeText").value.trim(),
+        goodHabitOfTheDay: document.getElementById("habitText").value.trim(),
+        moralMiniStory: document.getElementById("moralStoryText").value.trim()
+      };
+
+      const payload = {
+        id: issueId,
+        issue_date_key: issueId,
+        status,
+        editor_note: editorNote,
+        date: firebase.firestore.Timestamp.fromDate(new Date(issueDate + "T00:00:00")),
+        image_url: coverUrl,
+        pdf_url: pdfUrl,
+        sections,
+        mini_cards: miniCards,
+        updatedAt: Date.now()
+      };
+
+      if (!editingId) payload.createdAt = Date.now();
+
+      await db.collection("daily_newspapers").doc(issueId).set(payload, { merge: true });
+
+      saveState.textContent = "Saved ✔";
+      alert(`Issue ${issueId} saved`);
+      editingId = issueId;
+      existingCoverUrl = coverUrl;
+      existingPdfUrl = pdfUrl;
+      loadIssues();
+      renderPreview();
+    } catch (e) {
+      console.error(e);
+      saveState.textContent = "Save failed";
+      alert("Failed: " + e.message);
+    }
+  }
+
+  function fillForm(doc) {
+    const d = doc.data();
+    editingId = doc.id;
+
+    const date = d.date?.toDate?.();
+    if (date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      document.getElementById("issueDate").value = `${y}-${m}-${day}`;
+    }
+
+    document.getElementById("issueStatus").value = d.status || "draft";
+    document.getElementById("editorNote").value = d.editor_note || "";
+    existingCoverUrl = d.image_url || "";
+    existingPdfUrl = d.pdf_url || "";
+
+    for (const { key, label } of sectionKeys) {
+      const data = d.sections?.[key] || {};
+      document.getElementById(`${key}_title`).value = data.title || label;
+      document.getElementById(`${key}_content`).value = data.content || "";
+      document.getElementById(`${key}_file`).value = "";
+    }
+
+    document.getElementById("jokeText").value = d.mini_cards?.jokeOfTheDay || "";
+    document.getElementById("habitText").value = d.mini_cards?.goodHabitOfTheDay || "";
+    document.getElementById("moralStoryText").value = d.mini_cards?.moralMiniStory || "";
+
+    renderPreview();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  async function deleteIssue(id) {
+    if (!confirm(`Delete ${id}?`)) return;
+    await db.collection("daily_newspapers").doc(id).delete();
+    if (editingId === id) resetForm();
+    loadIssues();
+  }
+
+  function resetForm() {
+    editingId = null;
+    existingCoverUrl = "";
+    existingPdfUrl = "";
+    document.getElementById("issueDate").value = "";
+    document.getElementById("issueStatus").value = "draft";
+    document.getElementById("editorNote").value = "";
+    document.getElementById("coverFile").value = "";
+    document.getElementById("pdfFile").value = "";
+
+    for (const { key, label } of sectionKeys) {
+      document.getElementById(`${key}_title`).value = label;
+      document.getElementById(`${key}_content`).value = "";
+      document.getElementById(`${key}_file`).value = "";
+    }
+
+    document.getElementById("jokeText").value = "";
+    document.getElementById("habitText").value = "";
+    document.getElementById("moralStoryText").value = "";
+
+    saveState.textContent = "";
+    renderPreview();
+  }
+
+  async function loadIssues() {
+    const snap = await db.collection("daily_newspapers")
+      .orderBy("date", "desc")
+      .limit(50)
+      .get();
+
+    issuesTable.innerHTML = "";
+
+    snap.forEach(doc => {
+      const d = doc.data();
+      const dateLabel = d.date?.toDate?.().toLocaleDateString() || doc.id;
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><code>${esc(doc.id)}</code></td>
+        <td>${esc(dateLabel)}</td>
+        <td><span class="status-pill">${esc(d.status || "draft")}</span></td>
+        <td>${esc(d.sections?.topStory?.title || "-")}</td>
+        <td>
+          <button class="secondary" data-edit="${esc(doc.id)}">Edit</button>
+          <button class="danger" data-del="${esc(doc.id)}">Delete</button>
+        </td>
+      `;
+
+      row.querySelector('[data-edit]').onclick = () => fillForm(doc);
+      row.querySelector('[data-del]').onclick = () => deleteIssue(doc.id);
+      issuesTable.appendChild(row);
+    });
+  }
+
+  function renderPreview() {
+    const issueDate = document.getElementById("issueDate").value;
+    const dt = issueDate ? new Date(issueDate + "T00:00:00") : new Date();
+    const label = dt.toLocaleDateString(undefined, { day: "2-digit", month: "long", year: "numeric" });
+
+    let html = `
+      <div class="masthead">
+        <h2>KIDS DAILY NEWSPAPER</h2>
+        <div class="meta">Issue Date: ${esc(label)}</div>
+      </div>
+    `;
+
+    for (const { key, label } of sectionKeys) {
+      const t = document.getElementById(`${key}_title`).value || label;
+      const c = document.getElementById(`${key}_content`).value || "(content pending)";
+      const f = document.getElementById(`${key}_file`).files[0];
+      const imageUrl = f ? URL.createObjectURL(f) : "";
+
+      html += `
+        <div class="np-section">
+          <div class="np-title">${esc(t)}</div>
+          ${imageUrl ? `<img src="${imageUrl}" alt="${esc(t)}">` : ""}
+          <p class="np-snippet">${esc(c)}</p>
+        </div>
+      `;
+    }
+
+    html += `
+      <div class="mini-strip">
+        <div class="mini-card"><b>Joke of the Day</b><p>${esc(document.getElementById("jokeText").value || "-")}</p></div>
+        <div class="mini-card"><b>Good Habit</b><p>${esc(document.getElementById("habitText").value || "-")}</p></div>
+        <div class="mini-card"><b>Moral Mini Story</b><p>${esc(document.getElementById("moralStoryText").value || "-")}</p></div>
+      </div>
+    `;
+
+    document.getElementById("previewPaper").innerHTML = html;
+  }
+
+  document.body.addEventListener("input", (e) => {
+    if (e.target.matches("input, textarea, select")) renderPreview();
+  });
+
+  document.body.addEventListener("change", (e) => {
+    if (e.target.matches("input[type='file']")) renderPreview();
+  });
+
+  // defaults
+  resetForm();
+  loadIssues();
+</script>
+</body>
+</html>
