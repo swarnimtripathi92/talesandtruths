@@ -3,31 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="12dp"
-    app:strokeColor="#D9DFEE"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="#FFF9FF"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="3dp"
+    app:strokeColor="#E2D8FF"
     app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/txtSectionTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#111111"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/baloo_bold"
+            android:textColor="#1B1440"
+            android:textSize="24sp" />
 
         <ImageView
             android:id="@+id/imgSection"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="160dp"
             android:layout_marginTop="8dp"
             android:adjustViewBounds="true"
+            android:background="@drawable/rounded_image_bg"
+            android:clipToOutline="true"
             android:scaleType="centerCrop"
             android:src="@drawable/img_kids_newspaper_preview" />
 
@@ -35,9 +39,10 @@
             android:id="@+id/txtSectionContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="#3A3F52"
-            android:textSize="14sp" />
+            android:layout_marginTop="10dp"
+            android:textColor="#393E66"
+            android:textSize="16sp"
+            android:lineSpacingExtra="3dp" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

@@ -3,39 +3,72 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FB">
+    android:background="@drawable/bg_daily_newspaper_screen">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/toolbar"
         android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:background="#FFFFFF"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="16dp"
+        android:layout_height="74dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        app:cardBackgroundColor="#FFFFFFFF"
+        app:cardCornerRadius="26dp"
+        app:cardElevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#DCE7FF"
+        app:strokeWidth="1dp">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="Back"
-            android:src="@drawable/ic_back" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Today's Newspaper"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_back_button"
+                android:contentDescription="Back"
+                android:padding="8dp"
+                android:src="@drawable/ic_back"
+                android:tint="#2B355F" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/baloo_bold"
+                    android:text="Today\'s Newspaper"
+                    android:textColor="#151A37"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stories that sparkle for curious kids ✨"
+                    android:textColor="#6E6F97"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,28 +78,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingStart="16dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="16dp">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="6dp">
+                app:cardBackgroundColor="#FFFFFFFF"
+                app:cardCornerRadius="26dp"
+                app:cardElevation="10dp"
+                app:strokeColor="#E1E9FF"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_newspaper_header_card"
                     android:orientation="vertical"
                     android:padding="16dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/baloo_bold"
                         android:gravity="center"
                         android:text="KIDS DAILY NEWSPAPER"
-                        android:textColor="#111111"
-                        android:textSize="22sp"
-                        android:textStyle="bold" />
+                        android:textColor="#181C3B"
+                        android:textSize="30sp" />
 
                     <TextView
                         android:id="@+id/txtIssueDate"
@@ -75,16 +114,17 @@
                         android:layout_marginTop="4dp"
                         android:gravity="center"
                         android:text="Issue Date"
-                        android:textColor="#6E7590"
+                        android:textColor="#545E87"
                         android:textSize="13sp" />
 
                     <ImageView
                         android:id="@+id/imgCover"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
+                        android:layout_height="190dp"
                         android:layout_marginTop="12dp"
                         android:adjustViewBounds="true"
                         android:background="@drawable/rounded_image_bg"
+                        android:clipToOutline="true"
                         android:scaleType="centerCrop"
                         android:src="@drawable/img_kids_newspaper_preview" />
 
@@ -92,44 +132,51 @@
                         android:id="@+id/txtEditorNote"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textColor="#3A3F52"
-                        android:textSize="14sp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_editor_note"
+                        android:padding="12dp"
+                        android:textColor="#2E335E"
+                        android:textSize="15sp"
                         android:textStyle="italic" />
 
                     <LinearLayout
                         android:id="@+id/containerSections"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="14dp"
                         android:orientation="vertical" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        app:cardCornerRadius="12dp"
-                        app:strokeColor="#D9DFEE"
+                        android:layout_marginTop="6dp"
+                        app:cardBackgroundColor="#FFFDF5"
+                        app:cardCornerRadius="16dp"
+                        app:strokeColor="#FFE7A8"
                         app:strokeWidth="1dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="10dp">
+                            android:padding="12dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Joke of the Day"
-                                android:textStyle="bold" />
+                                android:fontFamily="@font/baloo_bold"
+                                android:text="😂 Joke of the Day"
+                                android:textColor="#5C3A00"
+                                android:textSize="20sp" />
 
                             <TextView
                                 android:id="@+id/txtJoke"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="-" />
+                                android:layout_marginTop="6dp"
+                                android:text="-"
+                                android:textColor="#4A4F6C"
+                                android:textSize="15sp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -137,28 +184,33 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        app:cardCornerRadius="12dp"
-                        app:strokeColor="#D9DFEE"
+                        app:cardBackgroundColor="#F2FFFB"
+                        app:cardCornerRadius="16dp"
+                        app:strokeColor="#B7EED8"
                         app:strokeWidth="1dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="10dp">
+                            android:padding="12dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Good Habit of the Day"
-                                android:textStyle="bold" />
+                                android:fontFamily="@font/baloo_bold"
+                                android:text="🌱 Good Habit of the Day"
+                                android:textColor="#0F5E46"
+                                android:textSize="20sp" />
 
                             <TextView
                                 android:id="@+id/txtHabit"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="-" />
+                                android:layout_marginTop="6dp"
+                                android:text="-"
+                                android:textColor="#4A4F6C"
+                                android:textSize="15sp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -166,33 +218,38 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        app:cardCornerRadius="12dp"
-                        app:strokeColor="#D9DFEE"
+                        app:cardBackgroundColor="#F6F1FF"
+                        app:cardCornerRadius="16dp"
+                        app:strokeColor="#D8C8FF"
                         app:strokeWidth="1dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:padding="10dp">
+                            android:padding="12dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Moral Mini Story"
-                                android:textStyle="bold" />
+                                android:fontFamily="@font/baloo_bold"
+                                android:text="📚 Moral Mini Story"
+                                android:textColor="#4A3387"
+                                android:textSize="20sp" />
 
                             <TextView
                                 android:id="@+id/txtMoral"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="-" />
+                                android:layout_marginTop="6dp"
+                                android:text="-"
+                                android:textColor="#4A4F6C"
+                                android:textSize="15sp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>
 
