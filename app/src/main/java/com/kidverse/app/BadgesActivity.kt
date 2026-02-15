@@ -21,18 +21,37 @@ class BadgesActivity : AppCompatActivity() {
         recycler.adapter = adapter
 
         val user = FirebaseAuth.getInstance().currentUser ?: return
+        val db = FirebaseFirestore.getInstance()
 
-        FirebaseFirestore.getInstance()
-            .collection("users")
+        db.collection("users")
             .document(user.uid)
-            .collection("badges")
+            .collection("readingHistory")
             .get()
-            .addOnSuccessListener { snap ->
-                list.clear()
-                for (doc in snap.documents) {
-                    list.add(doc.toObject(Badge::class.java)!!)
+            .addOnSuccessListener { historySnap ->
+                val totalStoryWords = historySnap.documents.sumOf {
+                    (it.getLong("wordsRead") ?: 0L).toInt()
                 }
-                adapter.notifyDataSetChanged()
+
+                db.collection("users")
+                    .document(user.uid)
+                    .get()
+                    .addOnSuccessListener { userDoc ->
+                        val gkStars = (userDoc.getLong("gkStars") ?: 0L).toInt()
+                        BadgeManager.checkAndUnlockBadges(totalStoryWords, gkStars)
+
+                        db.collection("users")
+                            .document(user.uid)
+                            .collection("badges")
+                            .get()
+                            .addOnSuccessListener { snap ->
+                                list.clear()
+                                for (doc in snap.documents) {
+                                    doc.toObject(Badge::class.java)?.let { list.add(it) }
+                                }
+                                list.sortWith(compareBy<Badge> { it.track }.thenBy { it.requiredStars })
+                                adapter.notifyDataSetChanged()
+                            }
+                    }
             }
     }
 }

@@ -68,6 +68,11 @@ class HomeActivity : AppCompatActivity() {
                 )
             }
 
+        findViewById<MaterialCardView>(R.id.cardWelcomeKid)
+            .setOnClickListener {
+                startActivity(Intent(this, BadgesActivity::class.java))
+            }
+
         findViewById<MaterialCardView>(R.id.btnParentZone)
             .setOnClickListener {
                 startActivity(Intent(this, ProfileActivity::class.java))
@@ -75,6 +80,7 @@ class HomeActivity : AppCompatActivity() {
 
         loadFeaturedStory()
         updateReadingStats()
+        loadWelcomeCard()
     }
 
     // --------------------------------------------
@@ -215,6 +221,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateReadingStats()
+        loadWelcomeCard()
     }
 
     private fun loadStoryPreview(storyId: String) {
@@ -243,4 +250,40 @@ class HomeActivity : AppCompatActivity() {
                     .into(findViewById(R.id.ivContinueIcon))
             }
     }
+
+
+    private fun loadWelcomeCard() {
+        val tvWelcomeTitle = findViewById<TextView>(R.id.tvWelcomeTitle)
+        val tvWelcomeMeta = findViewById<TextView>(R.id.tvWelcomeMeta)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            tvWelcomeTitle.text = "Welcome Kid"
+            tvWelcomeMeta.text = "🏅 Story Spark • 0 stars"
+            return
+        }
+
+        db.collection("users")
+            .document(user.uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                val childProfile = doc.get("childProfile") as? Map<*, *>
+                val childName = (childProfile?.get("childName") as? String)
+                    ?.takeIf { it.isNotBlank() }
+                    ?: "Kid"
+
+                val storyStars = BadgeManager.storyWordsToStars((doc.getLong("storyWords") ?: 0L).toInt())
+                val gkStars = (doc.getLong("gkStars") ?: 0L).toInt()
+                val totalStars = (doc.getLong("totalStars") ?: (storyStars + gkStars).toLong()).toInt()
+                val badgeTitle = doc.getString("currentBadge") ?: "Story Spark"
+
+                tvWelcomeTitle.text = "Welcome $childName"
+                tvWelcomeMeta.text = "🏅 $badgeTitle • $totalStars stars"
+            }
+            .addOnFailureListener {
+                tvWelcomeTitle.text = "Welcome Kid"
+                tvWelcomeMeta.text = "🏅 Story Spark • 0 stars"
+            }
+    }
+
 }

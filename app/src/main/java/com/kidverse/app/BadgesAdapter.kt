@@ -1,5 +1,6 @@
 package com.kidverse.app
 
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,8 @@ class BadgesAdapter(
         "#FFF7FB" to "#FFE5F3",
         "#F4FBFF" to "#DDF3FF",
         "#F8FFF5" to "#E3F9D8",
-        "#FFFDF5" to "#FFEFC9"
+        "#FFFDF5" to "#FFEFC9",
+        "#F3F6FF" to "#E1E8FF"
     )
 
     inner class BadgeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,32 +38,27 @@ class BadgesAdapter(
     override fun onBindViewHolder(holder: BadgeViewHolder, position: Int) {
         val badge = list[position]
 
-        holder.tvIcon.text = pickBadgeIcon(badge.title)
-        holder.tvTitle.text = badge.title
-        holder.tvSpark.text = pickSparkLine(position)
-
         val (startColor, endColor) = badgePalettes[position % badgePalettes.size]
         (holder.badgeCard.background.mutate() as? GradientDrawable)?.apply {
             colors = intArrayOf(startColor.toColorInt(), endColor.toColorInt())
         }
-    }
 
-    override fun getItemCount(): Int = list.size
-
-    private fun pickBadgeIcon(title: String): String {
-        val normalized = title.lowercase()
-        return when {
-            "word" in normalized -> "🧠"
-            "book" in normalized || "story" in normalized || "read" in normalized -> "📚"
-            "streak" in normalized || "daily" in normalized -> "🔥"
-            else -> "🏆"
+        if (badge.unlocked) {
+            holder.tvIcon.text = badge.icon
+            holder.tvTitle.text = badge.title
+            holder.tvSpark.text = "${badge.subtitle} • ${badge.requiredStars}⭐"
+            holder.badgeCard.alpha = 1f
+            holder.tvTitle.setTextColor("#2B2B47".toColorInt())
+            holder.tvSpark.setTextColor("#6B68A0".toColorInt())
+        } else {
+            holder.tvIcon.text = "🔒"
+            holder.tvTitle.text = badge.title
+            holder.tvSpark.text = "Unlock at ${badge.requiredStars} stars"
+            holder.badgeCard.alpha = 0.7f
+            holder.tvTitle.setTextColor(Color.parseColor("#5D5D74"))
+            holder.tvSpark.setTextColor(Color.parseColor("#8080A0"))
         }
     }
 
-    private fun pickSparkLine(position: Int): String = when (position % 4) {
-        0 -> "✨ Brilliant work"
-        1 -> "🌈 Keep growing"
-        2 -> "🚀 Superstar reader"
-        else -> "🎉 Awesome progress"
-    }
+    override fun getItemCount(): Int = list.size
 }

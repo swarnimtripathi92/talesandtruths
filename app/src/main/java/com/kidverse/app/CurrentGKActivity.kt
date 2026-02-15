@@ -171,6 +171,8 @@ class CurrentGKActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            GKTracker.recordGkRead(this, "current_daily_${todayLabel ?: "latest"}")
+
             val intent = Intent(this, PdfReaderActivity::class.java)
             intent.putExtra("pdf_url", todayPdfUrl)
             intent.putExtra("label", todayLabel)
@@ -207,6 +209,8 @@ class CurrentGKActivity : AppCompatActivity() {
                 Toast.makeText(this, "Magazine not available", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            GKTracker.recordGkRead(this, "current_monthly_${monthlyLabel ?: "latest"}")
 
             val intent = Intent(this, PdfReaderActivity::class.java)
             intent.putExtra("pdf_url", monthlyPdfUrl)

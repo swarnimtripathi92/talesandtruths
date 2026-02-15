@@ -80,6 +80,8 @@ class StaticGKActivity : AppCompatActivity() {
 
         recycler.adapter = StaticGKAdapter(categories) { category ->
 
+            GKTracker.recordGkRead(this, "static_${category.id}")
+
             when (category.id) {
 
                 "our_world" -> {

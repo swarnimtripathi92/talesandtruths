@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="18dp"
-        android:text="Collect stars, unlock stories, and grow your super-reader powers!"
+        android:text="10 badges to unlock: 5 Story badges + 5 GK badges. Read more to collect stars!"
         android:textColor="#5D5A7A"
         android:textSize="14sp" />
 
