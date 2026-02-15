@@ -3,8 +3,10 @@ package com.kidverse.app
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class FactAdapter(
     private val list: List<FactItem>
@@ -14,6 +16,7 @@ class FactAdapter(
         val icon: TextView = itemView.findViewById(R.id.tvIcon)
         val title: TextView = itemView.findViewById(R.id.tvTitle)
         val text: TextView = itemView.findViewById(R.id.tvText)
+        val image: ImageView = itemView.findViewById(R.id.imgFact)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FactVH {
@@ -24,7 +27,6 @@ class FactAdapter(
 
     override fun onBindViewHolder(holder: FactVH, position: Int) {
         val item = list[position]
-
         val textSize = TextPref.get(holder.itemView.context)
 
         holder.icon.text = item.icon
@@ -33,6 +35,16 @@ class FactAdapter(
 
         holder.title.textSize = textSize + 2
         holder.text.textSize = textSize
+
+        if (item.imageUrl.isBlank()) {
+            holder.image.visibility = View.GONE
+        } else {
+            holder.image.visibility = View.VISIBLE
+            Glide.with(holder.itemView.context)
+                .load(item.imageUrl)
+                .centerCrop()
+                .into(holder.image)
+        }
     }
 
     override fun getItemCount(): Int = list.size

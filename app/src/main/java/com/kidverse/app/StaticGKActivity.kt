@@ -84,19 +84,11 @@ class StaticGKActivity : AppCompatActivity() {
 
             GKTracker.recordGkRead("static_${category.id}")
 
-            when (category.id) {
-
-                "our_world" -> {
-                    startActivity(
-                        Intent(this, OurWorldActivity::class.java)
-                    )
-                }
-
-                else -> {
-                    // baaki categories future me
-                    // abhi blank ya toast bhi dikha sakte ho
-                }
+            val intent = Intent(this, GKSubCategoryActivity::class.java).apply {
+                putExtra(GKSubCategoryActivity.EXTRA_CATEGORY_ID, category.id)
+                putExtra(GKSubCategoryActivity.EXTRA_CATEGORY_TITLE, category.title)
             }
+            startActivity(intent)
         }
 
     }

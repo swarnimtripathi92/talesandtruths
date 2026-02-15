@@ -4,46 +4,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="5dp"
+    android:layout_marginHorizontal="14dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="6dp"
     app:cardUseCompatPadding="true"
-    app:cardBackgroundColor="@android:color/transparent">
+    app:cardBackgroundColor="@android:color/white"
+    app:strokeColor="#E9D5FF"
+    app:strokeWidth="1dp">
 
-    <!-- 🎨 Colorful background goes HERE -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@drawable/bg_section_card">
+        android:background="@drawable/bg_section_card"
+        android:padding="16dp">
 
-        <!-- Icon -->
         <TextView
             android:id="@+id/tvIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp" />
 
-        <!-- Title -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#1F2937" />
+            android:fontFamily="@font/baloo_bold"
+            android:textColor="#1F2937"
+            android:textSize="21sp" />
 
-        <!-- Description -->
+        <ImageView
+            android:id="@+id/imgFact"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_image_bg"
+            android:contentDescription="Fact image"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tvText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="15sp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/opensans"
+            android:lineSpacingExtra="4dp"
             android:textColor="#374151"
-            android:lineSpacingExtra="4dp" />
+            android:textSize="15sp" />
 
     </LinearLayout>
 
