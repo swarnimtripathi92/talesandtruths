@@ -1,111 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="#F3F6FF"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- 👶 CHILD PROFILE CARD -->
         <LinearLayout
             android:id="@+id/layoutProfile"
-            android:visibility="gone"
-            android:orientation="vertical"
-            android:padding="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_child_profile_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:elevation="6dp"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="gone">
 
-            <!-- Child Name -->
+            <LinearLayout
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/bg_profile_avatar"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/tvAvatarLetter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tvProfileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="14dp"
                 android:text="Aarav"
-                android:textSize="26sp"
-                android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
-            <!-- Subtitle -->
             <TextView
-                android:text="🌟 Young Reader"
-                android:textSize="16sp"
-                android:textColor="#E3F2FD"
-                android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:text="🌟 Future Book Hero"
+                android:textColor="#D9F7FF"
+                android:textSize="15sp" />
 
-            <!-- Details -->
             <TextView
                 android:id="@+id/tvProfileDetails"
-                android:textSize="18sp"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:lineSpacingExtra="6dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textColor="#FFFFFF"
+                android:textSize="17sp" />
 
-            <!-- Edit Button -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvReadingBadge"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_profile_chip"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="🔥 Daily Learner"
+                    android:textColor="#2A2A72"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvLanguageBadge"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_profile_chip"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="🌐 English"
+                    android:textColor="#2A2A72"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btnEditProfile"
-                android:text="✏️ Edit Profile"
-                android:textAllCaps="false"
-                android:textSize="16sp"
-                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
                 android:backgroundTint="#FFFFFF"
-                android:textColor="#3F51B5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:paddingVertical="10dp"
+                android:text="✨ Edit Super Profile"
+                android:textAllCaps="false"
+                android:textColor="#3849D8"
+                android:textSize="15sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
-
-        <!-- 📝 FORM VIEW -->
         <LinearLayout
             android:id="@+id/layoutForm"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_form_card"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="👶 Child Profile Setup"
+                android:textColor="#22307D"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Create a joyful, personalized reading journey."
+                android:textColor="#5B6192"
+                android:textSize="13sp" />
 
             <EditText
                 android:id="@+id/etChildName"
-                android:hint="Child Name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="Child Name"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="12dp"
+                android:textColor="#23264A"
+                android:textColorHint="#9AA1C4" />
 
             <Spinner
                 android:id="@+id/spAge"
-                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_input_field" />
 
             <Spinner
                 android:id="@+id/spClass"
-                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_input_field" />
 
             <Spinner
                 android:id="@+id/spLanguage"
-                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_input_field" />
 
             <Spinner
                 android:id="@+id/spReadingLevel"
-                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_input_field" />
 
             <Button
                 android:id="@+id/btnSaveProfile"
-                android:text="Save Profile"
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:backgroundTint="#3B4CE2"
+                android:paddingVertical="11dp"
+                android:text="🚀 Save Profile"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>

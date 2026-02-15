@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:layout_marginBottom="12dp"
-    android:background="@android:color/white"
-    android:elevation="3dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="14dp"
+    android:background="@drawable/bg_stats_card_modern"
+    android:elevation="4dp"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/tvTitle"
-        android:text="TITLE"
-        android:textStyle="bold"
-        android:textSize="18sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_stats_title_pill"
+        android:paddingLeft="12dp"
+        android:paddingTop="5dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="5dp"
+        android:text="TITLE"
+        android:textColor="#24355B"
+        android:textSize="17sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvStats"
-        android:text="Stats"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:lineSpacingExtra="6dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:text="Stats"
+        android:textColor="#2B3552"
+        android:textSize="15sp" />
 
 </LinearLayout>

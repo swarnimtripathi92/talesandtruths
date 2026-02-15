@@ -2,35 +2,43 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_reading_stats_screen"
     android:fillViewport="true"
-    android:padding="16dp">
+    android:padding="18dp">
 
-    <!-- ROOT LAYOUT (VERY IMPORTANT ID) -->
     <LinearLayout
         android:id="@+id/rootLayout"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <!-- HEADING -->
         <TextView
-            android:text="📊 Reading Stats"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="📊 Reading Stats"
+            android:textColor="#1F2A44"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
-        <!-- CARD 1 : TODAY -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="18dp"
+            android:text="Tiny progress, giant reader energy ✨"
+            android:textColor="#5F6B87"
+            android:textSize="14sp" />
+
         <include
+            android:id="@+id/cardToday"
             layout="@layout/layout_stats_card" />
 
-        <!-- CARD 2 : LAST 7 DAYS -->
         <include
+            android:id="@+id/cardWeek"
             layout="@layout/layout_stats_card" />
 
-        <!-- CARD 3 : ALL TIME -->
         <include
+            android:id="@+id/cardAllTime"
             layout="@layout/layout_stats_card" />
 
     </LinearLayout>

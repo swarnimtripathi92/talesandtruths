@@ -2,24 +2,32 @@ package com.kidverse.app
 
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import java.util.Locale
 
 class ChildProfileActivity : AppCompatActivity() {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
-    // Profile layout
     private lateinit var layoutProfile: LinearLayout
     private lateinit var tvProfileName: TextView
+    private lateinit var tvAvatarLetter: TextView
     private lateinit var tvProfileDetails: TextView
+    private lateinit var tvReadingBadge: TextView
+    private lateinit var tvLanguageBadge: TextView
     private lateinit var btnEditProfile: Button
 
-    // Form layout
     private lateinit var layoutForm: LinearLayout
     private lateinit var etName: EditText
     private lateinit var spAge: Spinner
@@ -49,7 +57,10 @@ class ChildProfileActivity : AppCompatActivity() {
     private fun bindViews() {
         layoutProfile = findViewById(R.id.layoutProfile)
         tvProfileName = findViewById(R.id.tvProfileName)
+        tvAvatarLetter = findViewById(R.id.tvAvatarLetter)
         tvProfileDetails = findViewById(R.id.tvProfileDetails)
+        tvReadingBadge = findViewById(R.id.tvReadingBadge)
+        tvLanguageBadge = findViewById(R.id.tvLanguageBadge)
         btnEditProfile = findViewById(R.id.btnEditProfile)
 
         layoutForm = findViewById(R.id.layoutForm)
@@ -65,7 +76,7 @@ class ChildProfileActivity : AppCompatActivity() {
         spAge.adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
-            (3..15).map { it.toString() }
+            (3..15).map { "$it years" }
         )
 
         spClass.adapter = ArrayAdapter(
@@ -97,11 +108,9 @@ class ChildProfileActivity : AppCompatActivity() {
                 val profile = doc.get("childProfile") as? Map<*, *>
 
                 if (profile == null) {
-                    // First time → show form
                     layoutForm.visibility = View.VISIBLE
                     layoutProfile.visibility = View.GONE
                 } else {
-                    // Profile exists → show profile card
                     layoutProfile.visibility = View.VISIBLE
                     layoutForm.visibility = View.GONE
 
@@ -112,13 +121,15 @@ class ChildProfileActivity : AppCompatActivity() {
                     val level = profile["readingLevel"] as? String ?: ""
 
                     tvProfileName.text = name
+                    tvAvatarLetter.text = name.firstOrNull()?.uppercaseChar()?.toString() ?: "K"
                     tvProfileDetails.text =
                         "🎂 Age: $age\n" +
-                                "🏫 Class: $cls\n" +
-                                "🌐 Language: $lang\n" +
-                                "📘 Reading Level: $level"
+                            "🏫 Class: $cls\n" +
+                            "📘 Reading Level: $level"
 
-                    // Prefill form for edit
+                    tvLanguageBadge.text = "🌐 $lang"
+                    tvReadingBadge.text = "${levelBadge(level)}"
+
                     etName.setText(name)
                     setSpinner(spAge, age)
                     setSpinner(spClass, cls)
@@ -126,6 +137,14 @@ class ChildProfileActivity : AppCompatActivity() {
                     setSpinner(spReading, level)
                 }
             }
+    }
+
+    private fun levelBadge(level: String): String {
+        return when (level.lowercase(Locale.getDefault())) {
+            "advanced" -> "🏆 Story Champion"
+            "intermediate" -> "⚡ Fast Learner"
+            else -> "🔥 Daily Learner"
+        }
     }
 
     private fun saveProfile() {
@@ -162,7 +181,8 @@ class ChildProfileActivity : AppCompatActivity() {
     private fun setSpinner(spinner: Spinner, value: String?) {
         value ?: return
         for (i in 0 until spinner.count) {
-            if (spinner.getItemAtPosition(i).toString() == value) {
+            val option = spinner.getItemAtPosition(i).toString()
+            if (option == value || option.startsWith(value)) {
                 spinner.setSelection(i)
                 break
             }

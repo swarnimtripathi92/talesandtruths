@@ -1,26 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="12dp"
-    android:layout_margin="8dp"
-    android:background="@android:color/white"
-    android:elevation="3dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_history_item_card"
+    android:elevation="3dp"
+    android:orientation="vertical"
+    android:padding="14dp">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Story Title"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Story Title"
+            android:textColor="#202448"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_history_category"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="6dp"
+            android:text="Moral"
+            android:textColor="#2E3DA5"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvMeta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Meta info"
-        android:textSize="14sp"
-        android:layout_marginTop="6dp"/>
+        android:layout_marginTop="8dp"
+        android:text="⏱️ 8 min • 📝 340 words"
+        android:textColor="#59618F"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="12 Feb 2026, 11:54 PM"
+        android:textColor="#7B82AF"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tvPower"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_history_power"
+        android:padding="10dp"
+        android:text="⚡ Reading Power: Great consistency today!"
+        android:textColor="#24427F"
+        android:textStyle="bold" />
+
 </LinearLayout>

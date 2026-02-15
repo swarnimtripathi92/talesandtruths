@@ -1,7 +1,7 @@
 package com.kidverse.app
 
 import android.os.Bundle
-import android.widget.LinearLayout
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -12,13 +12,11 @@ import java.util.HashSet
 
 class ReadingStatsActivity : AppCompatActivity() {
 
-    private lateinit var rootLayout: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reading_stats)
 
-        rootLayout = findViewById(R.id.rootLayout)
 
         val user = FirebaseAuth.getInstance().currentUser ?: return
 
@@ -71,7 +69,7 @@ class ReadingStatsActivity : AppCompatActivity() {
                 }
 
                 setupCard(
-                    position = 1,
+                    cardId = R.id.cardToday,
                     title = "📅 Today",
                     timeSec = todayTime,
                     words = todayWords,
@@ -79,7 +77,7 @@ class ReadingStatsActivity : AppCompatActivity() {
                 )
 
                 setupCard(
-                    position = 2,
+                    cardId = R.id.cardWeek,
                     title = "🗓️ Last 7 Days",
                     timeSec = weekTime,
                     words = weekWords,
@@ -87,7 +85,7 @@ class ReadingStatsActivity : AppCompatActivity() {
                 )
 
                 setupCard(
-                    position = 3,
+                    cardId = R.id.cardAllTime,
                     title = "🏆 All Time",
                     timeSec = totalTime,
                     words = totalWords,
@@ -104,22 +102,23 @@ class ReadingStatsActivity : AppCompatActivity() {
     }
 
     private fun setupCard(
-        position: Int,
+        cardId: Int,
         title: String,
         timeSec: Int,
         words: Int,
         stories: Int
     ) {
-        val card = rootLayout.getChildAt(position) as LinearLayout
+        val card = findViewById<View>(cardId)
 
         val tvTitle = card.findViewById<TextView>(R.id.tvTitle)
         val tvStats = card.findViewById<TextView>(R.id.tvStats)
 
         tvTitle.text = title
+        val minutes = timeSec / 60
         tvStats.text =
-            "⏱️ ${timeSec / 60} min\n" +
-                    "📝 $words words\n" +
-                    "📚 $stories stories"
+            "⏱️  Reading time   •   ${minutes} min\n" +
+                    "📝  Total words   •   $words\n" +
+                    "📚  Stories done  •   $stories"
     }
 
     private fun getStartOfToday(): Long {
