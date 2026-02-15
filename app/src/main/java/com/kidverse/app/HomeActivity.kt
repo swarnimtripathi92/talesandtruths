@@ -8,7 +8,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -156,10 +155,7 @@ class HomeActivity : AppCompatActivity() {
 
                 findViewById<TextView>(R.id.tvFeaturedTitle).text = title
 
-                Glide.with(this)
-                    .load(cover)
-                    .centerCrop()
-                    .into(findViewById(R.id.ivFeaturedCover))
+                findViewById<ImageView>(R.id.ivFeaturedCover).loadFast(cover)
             }
     }
 
@@ -208,6 +204,7 @@ class HomeActivity : AppCompatActivity() {
 
         val tvLast = findViewById<TextView>(R.id.tvLastStory)
         val tvTitle = findViewById<TextView>(R.id.tvContinueTitle)
+        val imageView = findViewById<ImageView>(R.id.ivContinueIcon)
         val tvReadingStats = findViewById<TextView>(R.id.tvReadingStats)
         val progressReading = findViewById<ProgressBar>(R.id.progressReading)
 
@@ -215,6 +212,15 @@ class HomeActivity : AppCompatActivity() {
         val storyLabel = if (weeklyReadCount == 1) "story" else "stories"
         tvReadingStats.text = "🔥 $weeklyReadCount $storyLabel this week"
         progressReading.progress = (weeklyReadCount * 20).coerceAtMost(100)
+
+        val cachedTitle = prefs.getString("lastReadStoryTitle", null)
+        val cachedCover = prefs.getString("lastReadStoryCover", null)
+
+        if (!cachedTitle.isNullOrBlank()) {
+            tvLast.text = "Last: $cachedTitle"
+            tvLast.visibility = View.VISIBLE
+            imageView.loadFast(cachedCover)
+        }
 
         val lastStoryId = prefs.getString("lastReadStoryId", null)
 
@@ -251,10 +257,7 @@ class HomeActivity : AppCompatActivity() {
                     visibility = View.VISIBLE
                 }
 
-                Glide.with(this)
-                    .load(cover)
-                    .centerCrop()
-                    .into(findViewById(R.id.ivContinueIcon))
+                findViewById<ImageView>(R.id.ivContinueIcon).loadFast(cover)
             }
     }
 

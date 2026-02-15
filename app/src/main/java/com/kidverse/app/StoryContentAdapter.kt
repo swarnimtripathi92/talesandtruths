@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import okhttp3.*
 import org.json.JSONArray
 import java.io.IOException
@@ -220,9 +219,7 @@ class StoryContentAdapter(
         private val img: ImageView = itemView.findViewById(R.id.imgStory)
 
         fun bind(url: String) {
-            Glide.with(itemView.context)
-                .load(url)
-                .into(img)
+            img.loadFast(url, centerCrop = false)
         }
     }
 

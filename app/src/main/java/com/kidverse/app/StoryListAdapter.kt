@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 
 class StoryListAdapter(
     private val list: List<StoryItem>,
@@ -28,10 +27,7 @@ class StoryListAdapter(
 
         holder.title.text = story.title
 
-        Glide.with(holder.itemView.context)
-            .load(story.coverImage)
-            .centerCrop()
-            .into(holder.cover)
+        holder.cover.loadFast(story.coverImage)
 
         // 🔒 New Premium Lock Logic
         val isLocked = !isPremium && story.isPremiumStory

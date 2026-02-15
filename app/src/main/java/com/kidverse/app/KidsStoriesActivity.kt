@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -94,8 +95,23 @@ class KidsStoriesActivity : AppCompatActivity() {
         fetchCategory("moral") {
             fetchCategory("bedtime") {
                 adapter.notifyDataSetChanged()
+                warmImageCache()
             }
         }
+    }
+
+
+    private fun warmImageCache() {
+        stories
+            .asSequence()
+            .map { it.coverImage }
+            .filter { it.isNotBlank() }
+            .take(8)
+            .forEach { cover ->
+                Glide.with(this)
+                    .load(cover)
+                    .preload()
+            }
     }
 
     private fun fetchCategory(category: String, onComplete: () -> Unit) {

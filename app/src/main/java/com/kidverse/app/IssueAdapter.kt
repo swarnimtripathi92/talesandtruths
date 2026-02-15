@@ -3,7 +3,8 @@ package com.kidverse.app.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.kidverse.app.R
+import com.kidverse.app.loadFast
 import com.kidverse.app.PdfDownloadUtil
 import com.kidverse.app.databinding.ItemIssueBinding
 import com.kidverse.app.model.IssueModel
@@ -32,9 +33,7 @@ class IssueAdapter(
         holder.binding.tvTitle.text = item.title
 
         if (!item.imageUrl.isNullOrEmpty()) {
-            Glide.with(holder.itemView.context)
-                .load(item.imageUrl)
-                .into(holder.binding.imgIssue)
+            holder.binding.imgIssue.loadFast(item.imageUrl, placeholder = R.drawable.img_monthly_kids_magazine)
         } else {
             holder.binding.imgIssue.setImageDrawable(null)
         }

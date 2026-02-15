@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 
 class KidsStoriesAdapter(
     private val stories: List<KidsStory>
@@ -33,11 +32,7 @@ class KidsStoriesAdapter(
 
         if (imageUrl.isNotBlank()) {
             // ✅ REAL COVER IMAGE
-            Glide.with(holder.itemView.context)
-                .load(imageUrl)
-                .placeholder(R.drawable.placeholder_story)
-                .error(R.drawable.placeholder_story)
-                .into(holder.coverImage)
+            holder.coverImage.loadFast(imageUrl)
         } else {
             // ✅ NO COVER IMAGE → SHOW PLACEHOLDER
             holder.coverImage.setImageResource(R.drawable.placeholder_story)
